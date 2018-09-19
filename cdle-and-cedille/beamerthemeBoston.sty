@@ -1,0 +1,53 @@
+\ProvidesPackageRCS $Header: /project/cl/Root/CVS/talks/rta05/beamerthemeOsaka.sty,v 1.1 2005/06/15 15:42:00 stump Exp $
+
+% Copyright 2004 by Manuel Carro <mcarro@fi.upm.es>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+\newif\ifbeamer@secheader
+\beamer@secheaderfalse
+
+\DeclareOptionBeamer{secheader}{\beamer@secheadertrue}
+\ProcessOptionsBeamer
+
+\usecolortheme{rose}
+\useinnertheme[shadow]{rounded}
+\useoutertheme{myinfolines}
+
+\setbeamertemplate{navigation symbols}{}
+
+% Tills' opinion: should be done in an inner theme, not here.
+
+\usesubitemizeitemtemplate{%
+    \tiny\raise1.5pt\hbox{\color{beamerstructure}$\blacktriangleright$}%
+}
+\usesubsubitemizeitemtemplate{%
+    \tiny\raise1.5pt\hbox{\color{beamerstructure}$\bigstar$}%
+}
+
+%control the textwidth of the main text within the frame:
+\setbeamersize{text margin left=.8cm,text margin right=1em}
+
+\newenvironment<>{varblock}[2][.9\textwidth]{%
+    \setlength{\textwidth}{#1}
+    \begin{actionenv}#3%
+        \def\insertblocktitle{#2}%
+        \par%
+        \usebeamertemplate{block begin}}
+    {\par%
+        \usebeamertemplate{block end}%
+    \end{actionenv}}
+
+
+
+%\addtobeamertemplate{block begin}{%
+%  \setlength{\textwidth}{0.92\textwidth}%
+%}{}
+
+%\ifbeamer@secheader\else\setbeamertemplate{headline}[default]\fi
+
+\mode
+<all>

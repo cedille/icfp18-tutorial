@@ -1,0 +1,60 @@
+\ProvidesPackageRCS $Header: /project/cl/Root/CVS/talks/smtcomp05/beamerouterthemenoinfolines.sty,v 1.1 2005/07/09 11:37:42 stump Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+%\setbeamercolor*{author in head/foot}{parent=palette tertiary}
+%\setbeamercolor*{title in head/foot}{parent=palette secondary}
+%\setbeamercolor*{date in head/foot}{parent=palette primary}
+
+\setbeamercolor*{author in head/foot}{fg=black,bg=white}
+\setbeamercolor*{title in head/foot}{fg=black,bg=white}
+\setbeamercolor*{date in head/foot}{fg=black,bg=white}
+
+%\setbeamercolor*{section in head/foot}{parent=palette tertiary}
+%\setbeamercolor*{subsection in head/foot}{parent=palette primary}
+
+
+%\insertlogo\hskip0.1cm
+
+%\defbeamertemplate*{footline}{infolines theme}
+%{
+%  \leavevmode%
+%  \vskip0pt%
+%}
+
+\defbeamertemplate*{footline}{infolines theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\beamer@ifempty\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+\definecolor{dbrown}{RGB}{125,30,0}
+\setbeamercolor{mycolor}{fg=white,bg=dbrown}
+
+\defbeamertemplate*{headline}{infolines theme}
+{
+  \leavevmode%
+  \vskip0pt%
+}
+
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+\mode
+<all>

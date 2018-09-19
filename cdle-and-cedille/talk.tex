@@ -1,0 +1,194 @@
+\documentclass[11pt]{beamer}
+
+\usepackage{cedilleverbatim}
+\usepackage{times}
+\usepackage{stmaryrd}
+\usepackage{MnSymbol}
+\usepackage[normalem]{ulem} %for \sout
+
+\usepackage{tikz}
+\usepackage{graphicx}
+%\usepackage{epstopdf}
+\usepackage{color}
+%\usepackage{tabularx}
+\usepackage{pgflibraryarrows}
+\usepackage{pgflibraryshapes}
+\usepackage{pgfbaseimage}
+\usepackage{listings}
+
+\usetikzlibrary{decorations.text}
+
+%\documentclass{beamer}
+%\usepackage{beamerthemesplit}
+%\usepackage{mathptmx}
+%\usepackage{helvet}
+
+%\usepackage{amsmath}
+\usepackage{latexsym}
+%\usepackage{amssymb}
+\usepackage{proof}
+\usepackage{verbatim} 
+\usepackage{url}
+
+\definecolor{navy}{RGB}{0,0,128}
+\definecolor{dorange}{RGB}{255,100,0}
+\definecolor{dgreen}{RGB}{0,75,0}
+\definecolor{dbrown}{RGB}{125,30,0}
+\definecolor{lbrown}{RGB}{245,150,120}
+\definecolor{ored}{RGB}{255,150,70}
+\definecolor{oredd}{RGB}{255,69,0}
+\definecolor{lightred}{RGB}{255,70,70}
+\definecolor{vlred}{RGB}{255,170,170}
+\definecolor{cream}{RGB}{255,253,208}
+\definecolor{lthistle}{RGB}{185,175,185}
+
+\newcommand{\semeq}[1]{\langle\hspace{-.08cm}|#1|\hspace{-0.08cm}\rangle}
+\newcommand{\rep}[1]{\ulcorner #1 \urcorner}
+\newcommand{\tlift}[2]{{\uparrow}_{#1}\,(#2)}
+\newcommand{\dstar}[0]{\smallstar}
+\newcommand{\utp}[0]{\mathcal{U}}
+\newcommand{\elcap}[0]{\cap}
+\newcommand{\nutt}[4]{\nu\, #1\! :\! #2 \, |\, #3.\, #4}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket} 
+\newcommand{\abs}[4]{{#1}\, #2\! : \! #3.\, #4}
+
+% unicode
+\usepackage[utf8]{inputenc}
+\DeclareUnicodeCharacter{2605}{\ensuremath{\star}}
+\DeclareUnicodeCharacter{2081}{\ensuremath{_1}}
+\DeclareUnicodeCharacter{2082}{\ensuremath{_2}}
+\DeclareUnicodeCharacter{2228}{\ensuremath{\vee}}
+\DeclareUnicodeCharacter{27E6}{\ensuremath{\llbracket}}
+\DeclareUnicodeCharacter{27E7}{\ensuremath{\rrbracket}}
+\DeclareUnicodeCharacter{228E}{\ensuremath{\uplus}}
+\DeclareUnicodeCharacter{2113}{\ensuremath{\ell}}
+\DeclareUnicodeCharacter{2294}{\ensuremath{\sqcup}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{22CE}{\ensuremath{\curlyvee}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2238}{\ensuremath{\dotdiv}}
+\DeclareUnicodeCharacter{2261}{\ensuremath{\equiv}}
+\DeclareUnicodeCharacter{3BB}{\ensuremath{\lambda}}
+\DeclareUnicodeCharacter{1D539}{\ensuremath{\mathbb{B}}}
+\DeclareUnicodeCharacter{1D543}{\ensuremath{\mathbb{L}}}
+\DeclareUnicodeCharacter{1D54A}{\ensuremath{\mathbb{S}}}
+\DeclareUnicodeCharacter{1D54B}{\ensuremath{\mathbb{T}}}
+\DeclareUnicodeCharacter{1D54D}{\ensuremath{\mathbb{V}}}
+\DeclareUnicodeCharacter{D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{25C2}{\ensuremath{:}}
+
+\newcommand{\myb}[0]{\ensuremath{\textcolor{blue}{\triangleright}}}
+
+\newcommand{\fore}[0]{\ensuremath{F_\omega^{\textit{rec}}}}
+
+
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+
+%\usetheme{IowaCity}
+\usetheme{Boston}
+%\usetheme{Savannah}
+
+%  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+
+
+\date{\ }
+
+\begin{document}
+
+
+\setbeamercolor{normal text}{bg=white,fg=black}
+
+\begin{frame}
+
+\begin{center}
+{\Large
+  Introduction to Programming and \\
+  Proving in Cedille }
+
+\vspace{.2cm}
+
+\includegraphics[width=3cm]{logo}
+
+%\includegraphics[width=5cm]{oldcap}
+
+\vspace{.6cm}
+
+Chris Jenkins, Colin McDonald, Aaron Stump
+
+{\small
+Computer Science 
+
+The University of Iowa
+
+Iowa City, Iowa}
+
+\end{center}
+\end{frame}
+
+\newcommand{\grun}[1]{\textcolor{dgreen}{\underline{#1}}}
+
+\newenvironment{planslide}[1]{%
+\begin{frame}
+\frametitle{Plan for the tutorial}
+
+\large 
+
+\begin{tabular}{l c l }
+
+\raisebox{-.25\height}{\includegraphics[width=.7cm]{logo}}? &\ & \textcolor{#1}{Motivation and background for Cedille} \\ \\
+
+
+$\vdash \textit{\textcolor{red}{C}e\textcolor{red}{D}il\textcolor{red}{LE}}$ &\ & \textcolor{#1}{Syntax and semantics}\\ \\
+
+\texttt{cedille} &\ & \textcolor{#1}{Tooling: emacs frontend $\leftrightarrow$ backend} \\ \\
+
+\texttt{c d ll} &\ & \textcolor{#1}{Spine-local type inference} \\ \\ 
+
+$\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to Cedille Core} \\ \\
+
+%\begin{tikzpicture}[
+%  decoration={
+%    reverse path,
+%    text effects along path,
+%    text={cedille cedille cedille cedille cedille cedille cedille cedille cedille cedille cedille cedille cedille cedille
+%      cedille cedille cedille cedille cedille cedille cedille cedille cedille.},
+%    text effects/.cd,
+%      text along path,
+%      character count=\i, character total=\n,
+%      characters={scale=1-\i/\n}
+%    }
+%]
+%\draw [decorate] (0,0) 
+%    \foreach \i [evaluate={\r=(\i/2400)^2;}] in {0,7,...,2380}{ -- (\i:\r)}; 
+%\end{tikzpicture}
+
+\raisebox{-.8\height}{\includegraphics[width=2cm]{cedillespiral}} &\ & 
+
+\textcolor{#1}{Future directions}
+
+
+\end{tabular}
+
+\end{frame}
+}
+
+\planslide{white}
+\planslide{red}
+
+
+\end{document}
