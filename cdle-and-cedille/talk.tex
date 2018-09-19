@@ -142,6 +142,8 @@ Iowa City, Iowa}
 
 \newcommand{\grun}[1]{\textcolor{dgreen}{\underline{#1}}}
 
+\newcommand{\qlogo}[1]{\raisebox{-.25\height}{\includegraphics[width=#1]{logo}}?}
+
 \newenvironment{planslide}[1]{%
 \begin{frame}
 \frametitle{Plan for the tutorial}
@@ -150,16 +152,16 @@ Iowa City, Iowa}
 
 \begin{tabular}{l c l }
 
-\raisebox{-.25\height}{\includegraphics[width=.7cm]{logo}}? &\ & \textcolor{#1}{Motivation and background for Cedille} \\ \\
+\qlogo{.7cm} &\ & \textcolor{#1}{Motivation and background for Cedille} \\ \\
 
 
 $\vdash \textit{\textcolor{red}{C}e\textcolor{red}{D}il\textcolor{red}{LE}}$ &\ & \textcolor{#1}{Syntax and semantics}\\ \\
 
 \texttt{cedille} &\ & \textcolor{#1}{Tooling: emacs frontend $\leftrightarrow$ backend} \\ \\
 
-\texttt{c d ll} &\ & \textcolor{#1}{Spine-local type inference} \\ \\ 
-
 $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to Cedille Core} \\ \\
+
+\texttt{c d ll} &\ & \textcolor{#1}{Spine-local type inference} \\ \\ 
 
 %\begin{tikzpicture}[
 %  decoration={
@@ -190,5 +192,65 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 \planslide{white}
 \planslide{red}
 
+\begin{frame}
+\begin{center}
+  \Huge
+  \qlogo{1.8
+    cm}
+
+  \vspace{1cm}
+
+{\Large
+  \textcolor{red}{Motivation and background for Cedille}
+}
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Architecture of Cedille}
+
+\hspace{1cm}\begin{tikzpicture}
+
+\path (1,0) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](l){Emacs mode} ;
+\path (6,0) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](r){Backend} ;
+
+\draw[<->,very thick,red] (r.west) -- (l.east);
+
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Emacs mode (\emph{to be revised})}
+
+\begin{itemize}
+\item Cedille has an emacs mode for editing Cedille files
+\item Based on a generic structured-editing mode by Carl Olson
+
+\vspace{.25cm}
+
+\hspace{1cm}\begin{tikzpicture}
+
+\path (1,0) node[very thick,blue,rectangle,draw,inner xsep=5pt,inner ysep=20pt](l){Emacs mode} ;
+\path (6,0) node[very thick,red,rectangle,draw,inner xsep=5pt,inner ysep=20pt](r){Backend} ;
+
+\draw[->,very thick,blue] (2.3,0.5) -| node[pos=0.25,above] {\texttt{nat.ced}} (5.0,0.5);
+\draw[->,very thick,red] (r.west) -| node[pos=0.25,below] {\textit{spans}} (l.east);
+
+\end{tikzpicture}
+
+\vspace{.1cm}
+
+\item A span is $[\textit{label},\textit{start-pos},\textit{end-pos},\textit{attributes}]$
+
+\item Spans communicated in JSON
+
+\item Cedille sends \underline{all} type information, in span attributes
+
+\item Monadic style for writing the backend (type checker)
+
+\end{itemize}
+\end{frame}
 
 \end{document}
