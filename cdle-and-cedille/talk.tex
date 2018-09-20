@@ -2,6 +2,7 @@
 
 \usepackage{cedilleverbatim}
 \usepackage{times}
+\usepackage[absolute,overlay]{textpos}
 \usepackage{stmaryrd}
 \usepackage{MnSymbol}
 \usepackage[normalem]{ulem} %for \sout
@@ -206,6 +207,39 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
   \end{center}
 
 \end{frame}
+
+\begin{frame}
+\frametitle{A little history}
+
+\pause
+\begin{center}
+\includegraphics[width=4in]{bonnevillesign}
+\end{center}
+
+\end{frame}
+
+\setlength{\TPHorizModule}{.1cm}
+\setlength{\TPVertModule}{.1cm}
+\setbeamercolor{mycolor}{fg=black,bg=white}
+
+\begin{frame}
+  \frametitle{System F (Girard, Reynolds, early 1970s)}
+
+\begin{tikzpicture}
+    \node at (0,0) {\includegraphics[width=4in]{bonneville1}};
+    \pause
+    \node at (0,0) {\begin{minipage}{7cm}
+\begin{beamercolorbox}{mycolor}
+        \begin{itemize}
+        \item Raw power (\textcolor{blue}{impredicativity!})
+        \item A little crude (\textcolor{red}{no Curry-Howard})
+          \vspace{.25cm}
+          \end{itemize}
+                    \end{beamercolorbox}\end{minipage}};
+\end{tikzpicture}
+    \end{frame}
+
+
 
 \begin{frame}
   \frametitle{Architecture of Cedille}
