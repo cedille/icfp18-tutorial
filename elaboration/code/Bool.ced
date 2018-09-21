@@ -1,0 +1,55 @@
+module Bool.
+import Util.
+
+-- Untyped constructors
+ttu ◂ Top = β{λ x. λ y. x}.
+ffu ◂ Top = β{λ x. λ y. y}.
+
+-- Dependent intersection between "Top" type (which any term can inhabit)
+-- and a boolean type dependent upon it. Since both iota-pair projections
+-- must be equal, the "x" in "X x" below erases to the entire boolean itself.
+Bool ◂ ★ = ι x : Top. ∀ X : Top ➔ ★. X ttu ➔ X ffu ➔ X x.
+
+-- "True" constructor
+tt ◂ Bool = [ttu, Λ X. λ x. λ y. x].
+-- Type is X ttu, tt's erasure!---^
+
+-- "False" constructor
+ff ◂ Bool = [ffu, Λ X. λ x. λ y. y].
+
+-- Induction principle
+BoolInd ◂ Π b : Bool. ∀ Q : Bool ➔ ★. Q tt ➔ Q ff ➔ Q b =
+  λ b. Λ Q. λ t. λ f.
+    b.2 · (λ x : Top. ∀ b : Bool. ∀ e : {b ≃ x}. Q (φ e - b {x}))
+-- The "real" Bool    ^---------^, which is equal to x
+      (Λ b. Λ e. t) -- tt case
+      (Λ b. Λ e. f) -- ff case
+      -b -- the "real" bool
+      -β. -- proof of { b ≃ β{b} }, which erases to { b ≃ b }
+
+-- Non-inductive eliminator, a.k.a. "if"
+if ◂ ∀ X : ★. Bool ➔ X ➔ X ➔ X =
+  Λ X. λ b. BoolInd b · (λ b : Bool. X).
+
+--------------------------------------------------------------------------------
+
+not ◂ Bool ➔ Bool = λ b. [β{λ x. λ y. b y x},
+  Λ X. λ x. λ y. b.2 · (λ b : Top. X β{λ x. λ y. b y x}) y x].
+
+and ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. [β{λ x. λ y. a (b x y) y},
+  Λ X. λ x. λ y. a.2 · (λ a : Top. X β{λ x. λ y. a (b x y) y}) (b.2 x y) y].
+
+or ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. [β{λ x. λ y. a x (b x y)},
+  Λ X. λ x. λ y. a.2 · (λ a : Top. X β{λ x. λ y. a x (b x y)}) x (b.2 x y)].
+
+xor ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. [β{λ x. λ y. a (b y x) (b x y)},
+  Λ X. λ x. λ y. a.2 · (λ a : Top. X β{λ x. λ y. a (b y x) (b x y)})
+    (b.2 · (λ b : Top. X β{λ x. λ y. b y x}) y x) (b.2 x y)].
+
+nand ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. not (and a b).
+
+nor ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. not (or a b).
+
+xnor ◂ Bool ➔ Bool ➔ Bool = λ a. λ b. not (xor a b).
+
+iff ◂ Bool ➔ Bool ➔ Bool = xnor.

@@ -1,0 +1,8 @@
+module Deps.
+import public Util.
+import public Bool.
+import public Nat.
+
+id ◂ ∀ X : ★. X ➔ X = Λ X. λ x. x.
+
+opaque Matrix ◂ Nat ➔ Nat ➔ ★ = λ w : Nat. λ h : Nat. Top.
