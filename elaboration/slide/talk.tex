@@ -1,0 +1,205 @@
+\documentclass[11pt]{beamer}
+
+\usepackage{cedilleverbatim}
+\usepackage{times}
+\usepackage{stmaryrd}
+\usepackage{MnSymbol}
+\usepackage[normalem]{ulem} %for \sout
+
+\usepackage{tikz}
+\usepackage{graphicx}
+%\usepackage{epstopdf}
+\usepackage{color}
+%\usepackage{tabularx}
+\usepackage{pgflibraryarrows}
+\usepackage{pgflibraryshapes}
+\usepackage{pgfbaseimage}
+\usepackage{listings}
+
+\usetikzlibrary{decorations.text}
+
+%\documentclass{beamer}
+%\usepackage{beamerthemesplit}
+%\usepackage{mathptmx}
+%\usepackage{helvet}
+
+%\usepackage{amsmath}
+\usepackage{latexsym}
+%\usepackage{amssymb}
+\usepackage{proof}
+\usepackage{verbatim} 
+\usepackage{url}
+
+\definecolor{navy}{RGB}{0,0,128}
+\definecolor{dorange}{RGB}{255,100,0}
+\definecolor{dgreen}{RGB}{0,75,0}
+\definecolor{dbrown}{RGB}{125,30,0}
+\definecolor{lbrown}{RGB}{245,150,120}
+\definecolor{ored}{RGB}{255,150,70}
+\definecolor{oredd}{RGB}{255,69,0}
+\definecolor{lightred}{RGB}{255,70,70}
+\definecolor{vlred}{RGB}{255,170,170}
+\definecolor{cream}{RGB}{255,253,208}
+\definecolor{lthistle}{RGB}{185,175,185}
+
+\newcommand{\mycedtext}[1]{\emph{$\texttt{{#1}}$}}
+%\newcommand{\myparens}[1]{\emph{$\texttt{({#1})}$}}
+%\newcommand{\mybrackets}[1]{\emph{$\texttt{[{#1}]}$}}
+\newcommand{\semeq}[1]{\langle\hspace{-.08cm}|#1|\hspace{-0.08cm}\rangle}
+\newcommand{\rep}[1]{\ulcorner #1 \urcorner}
+\newcommand{\tlift}[2]{{\uparrow}_{#1}\,(#2)}
+\newcommand{\dstar}[0]{\smallstar}
+\newcommand{\utp}[0]{\mathcal{U}}
+\newcommand{\elcap}[0]{\cap}
+\newcommand{\nutt}[4]{\nu\, #1\! :\! #2 \, |\, #3.\, #4}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket} 
+\newcommand{\abs}[4]{{#1}\, #2\! : \! #3.\, #4}
+
+% unicode
+\usepackage[utf8]{inputenc}
+\DeclareUnicodeCharacter{2605}{\ensuremath{\star}}
+\DeclareUnicodeCharacter{2081}{\ensuremath{_1}}
+\DeclareUnicodeCharacter{2082}{\ensuremath{_2}}
+\DeclareUnicodeCharacter{2228}{\ensuremath{\vee}}
+\DeclareUnicodeCharacter{27E6}{\ensuremath{\llbracket}}
+\DeclareUnicodeCharacter{27E7}{\ensuremath{\rrbracket}}
+\DeclareUnicodeCharacter{228E}{\ensuremath{\uplus}}
+\DeclareUnicodeCharacter{2113}{\ensuremath{\ell}}
+\DeclareUnicodeCharacter{2294}{\ensuremath{\sqcup}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{22CE}{\ensuremath{\curlyvee}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2238}{\ensuremath{\dotdiv}}
+\DeclareUnicodeCharacter{2261}{\ensuremath{\equiv}}
+\DeclareUnicodeCharacter{3BB}{\ensuremath{\lambda}}
+\DeclareUnicodeCharacter{3C6}{\ensuremath{\phi}}
+\DeclareUnicodeCharacter{1D539}{\ensuremath{\mathbb{B}}}
+\DeclareUnicodeCharacter{1D543}{\ensuremath{\mathbb{L}}}
+\DeclareUnicodeCharacter{1D54A}{\ensuremath{\mathbb{S}}}
+\DeclareUnicodeCharacter{1D54B}{\ensuremath{\mathbb{T}}}
+\DeclareUnicodeCharacter{1D54D}{\ensuremath{\mathbb{V}}}
+\DeclareUnicodeCharacter{D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{25C2}{\ensuremath{:}}
+
+\newcommand{\myb}[0]{\ensuremath{\textcolor{blue}{\triangleright}}}
+
+\newcommand{\fore}[0]{\ensuremath{F_\omega^{\textit{rec}}}}
+
+
+\mode<presentation>
+{
+  %\usetheme{Warsaw}
+  % or ...
+
+%\usetheme{IowaCity}
+\usetheme{Boston}
+%\usetheme{Savannah}
+
+%  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+
+
+\date{\ }
+
+\begin{document}
+
+\setbeamercolor{normal text}{bg=white,fg=black}
+
+\begin{frame}
+\frametitle{What is Cedille\textsubscript{core}?}
+
+\begin{itemize}
+\item Independent implementation of CDLE (fact check?)
+\item Under 1000 lines of code, in Haskell
+\item Austere sublanguage of Cedille
+\item Cedille sanity check
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Cedille vs. Cedille\textsubscript{core}}
+
+\hspace{0.5cm}
+\begin{tikzpicture}
+
+\path (0,0) node[very thick,red,ellipse,draw,inner xsep=100pt,inner ysep=70pt](cedille){} ;
+\path (-5,-3) node[right]{\textcolor{red}{Cedille}} ;
+
+\path (-1.8,2.2) node {\mycedtext{(λ x $:$ T$.$ t)}} ;
+\path (1,2.9) node {\mycedtext{(λ x$.$ t)}} ;
+\path (2.2,2.2) node {\mycedtext{[ t\textsubscript{1}$,$ t\textsubscript{2} ]}} ;
+\path (-1,0.3) node {\mycedtext{[ t\textsubscript{1}$,$ t\textsubscript{2} @ x$.$ T\textsubscript{x} ]}} ;
+\path (4,-0.1) node {\mycedtext{ε}} ;
+\path (0,1.3) node {\mycedtext{δ}} ;
+\path (-2,1) node {\mycedtext{(ρ e @ x$.$ T\textsubscript{x} $-$ t)}} ;
+\path (2.3,0.7) node {\mycedtext{β}} ;
+\path (-3,-1.8) node {\mycedtext{(β<u\textsubscript{T}>)}} ;
+\path (2.5,-0.4) node {\mycedtext{(β\{u\textsubscript{t}\})}} ;
+\path (-2.8,-0.3) node {\mycedtext{(β<u\textsubscript{T}>\{u\textsubscript{t}\})}} ;
+\path (1.5,0.7) node {\mycedtext{φ}} ;
+\path (-2,-2.4) node {\mycedtext{(ρ e $-$ t)}} ;
+\path (1.5,-1.6) node {\mycedtext{(ρ<3\;4\;6> e $-$ t)}};
+\path (2.5,-1) node {\mycedtext{χ}} ;
+\path (0,-1) node {\mycedtext{ς}} ;
+\path (-0.5,-1.7) node {\mycedtext{θ}} ;
+\path (0.6,-2.7) node {\tiny{$Type$-$Argument \ Inference$}} ;
+\path (2.9,1.3) node {\tiny{$Type \ Checking$}} ;
+\path (-2,-1) node {\tiny{$Type \ Synthesis$}} ;
+\path (2.8,0.2) node {\tiny{$Scope \ Shadowing$}} ;
+
+\pause
+
+\path (-1.43,0.7) node[very thick,gray,ellipse,draw,inner xsep=65pt,inner ysep=45pt](cedillecore){} ;
+\path (-5,-3.5) node[right]{\textcolor{gray}{Cedille\textsubscript{core}}} ;
+
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Elaboration}
+
+\begin{itemize}
+\item Classify λ-terms \\
+\quad \mycedtext{λ x$.$ t  $\leadsto$  λ x $:$ T$.$ t}
+\pause
+\item Insert infered type arguments \\
+\quad \mycedtext{id zero  $\leadsto$  id \textcolor{darkgray}{·} Nat zero}
+\pause
+\item Specify where rewrites occur in ρ-terms \\
+\quad \mycedtext{?  $\leadsto$  ?}
+\pause
+\item Provide dependent type of second projection in ι\hspace{0.02cm}-pairs \\
+\quad \mycedtext{[ zero\textcolor{darkgray}{'}$,$ zeroi ]  $\leadsto$  [ zero\textcolor{darkgray}{'}$,$ zeroi @ x$.$ T\textsubscript{x} ]}
+\pause
+\item Ensure β-terms supply both a term \mycedtext{t} for proving \mycedtext{\{ t $\simeq$ t \}} and one for erasure \\
+\quad \mycedtext{β  $\leadsto$  β<t>\{λ x$.$ x\}}
+\pause
+\item Convert δ-contradictions to Church-encoded \mycedtext{\{ tt $\simeq$ ff \}} \\
+\tiny{\mycedtext{tt = λ x$.$ λ y$.$ x, ff = λ x$.$ λ y$.$ y, zero = λ f$.$ λ x$.$ x, suc = λ n$.$ λ f$.$ λ x$.$ s (n f x)}} \\
+\footnotesize{\mycedtext{\{suc n $\simeq$ zero\} $\leadsto$ \{suc n (λ \_$.$ tt) ff $\simeq$ zero (λ \_$.$ tt) ff\}}}
+\pause
+\item \normalsize{Expand module parameters and import arguments}
+\end{itemize}
+
+\end{frame}
+
+%?
+%\begin{frame}
+%\frametitle{Type-Preserving Rewrites}
+%\end{frame}
+
+
+\end{document}

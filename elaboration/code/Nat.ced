@@ -1,0 +1,99 @@
+module Nat.
+import Util.
+
+-- Non-inductive type
+Nat' ◂ ★ = ∀ X : ★. X ➔ (X ➔ X) ➔ X.
+
+-- Non-inductive constructors
+zero' ◂ Nat' = Λ X. λ z. λ s. z.
+suc' ◂ Nat' ➔ Nat' = λ n. Λ X. λ z. λ s. s (n z s).
+
+-- Dependent parametric type
+NatI ◂ Nat' ➔ ★ = λ n : Nat'.
+  [zerou ◂ Top = β{λ z. λ s. z}] -
+  [sucu ◂ Top = β{λ n. λ z. λ s. s (n z s)} ] -
+  ι rec : {n zerou sucu ≃ n}.
+    ∀ Nat : ★.
+    ∀ zero' : Eq · Nat zerou.
+    ∀ suc' : Eq · (Nat ➔ Nat) sucu.
+    [zero = φ zero'.2 - zero'.1 {zerou}] -
+    [suc = φ suc'.2 - suc'.1 {sucu}] -
+    ∀ Q : Nat ➔ ★.
+    Q zero ➔
+    (∀ n : Nat. Q n ➔ Q (suc n)) ➔
+    Q (φ rec - n zero suc {n}).
+
+-- Dependent constructors
+zeroi ◂ NatI zero' =
+  [β{λ z. λ s. z},
+   Λ N. Λ zero. Λ suc. Λ Q. λ z. λ s. z].
+suci ◂ ∀ n : Nat'. NatI n ➔ NatI (suc' n) =
+  Λ n'. λ n.
+    [ρ+ n.1 - β{λ z. λ s. s (n z s)},
+     Λ N. Λ zero. Λ suc. Λ Q. λ z. λ s.
+       s -(φ (ρ zero.2 - ρ suc.2 - n.1) - n' zero.1 suc.1 {n'})
+         (n.2 -zero -suc z s)].
+
+-- Inductive type
+Nat ◂ ★ = ι n : Nat'. NatI n.
+
+-- Inductive constructors
+zero ◂ Nat = [zero', zeroi].
+suc ◂ Nat ➔ Nat = λ n. [suc' n.1, suci -n.1 n.2].
+
+NatInd ◂ Π n : Nat. ∀ Q : Nat ➔ ★. Q zero ➔ (∀ n : Nat. Q n ➔ Q (suc n)) ➔ Q n =
+  λ n. Λ Q. λ z. λ s. phi β{n z s}
+    -(n.2.2 · Nat -[zero, β{zero}] -[suc, β{suc}]
+        · (λ n : Nat. ι n' : Q n. {n' ≃ n z s})
+        [z, β{z}] (Λ n. λ ih. [s -n ih.1, ρ ih.2 - β{s ih}])).
+
+foldn ◂ Nat ➔ Nat' = λ n. n.1.
+
+--------------------------------------------------------------------------------
+
+one ◂ Nat = suc zero.
+
+
+add ◂ Nat ➔ Nat ➔ Nat = λ m. λ n. foldn n m suc.
+mlt ◂ Nat ➔ Nat ➔ Nat = λ m. λ n. foldn n zero (λ x. add x m).
+exp ◂ Nat ➔ Nat ➔ Nat = λ m. λ n. foldn n one (λ x. mlt x m).
+
+{- Requires a pair/product file
+sub ◂ Nat ➔ Nat ➔ Nat = λ m. λ n. foldn n m prd.
+prd ◂ Nat ➔ Nat = λ n. snd (foldn n (pair zero zero) (λ x. pair (suc (fst x)) (fst x))).
+-}
+
+-- Some addition theorems
+add-zero1 ◂ Π n : Nat. {add zero n ≃ n} =
+  λ n. θ<n> (NatInd n) β (Λ n. λ ih. ρ+ ih - β).
+
+add-zero2 ◂ Π n : Nat. {add n zero ≃ n} =
+  λ n. β.
+
+add-suc1 ◂ Π m : Nat. Π n : Nat. {add (suc m) n ≃ suc (add m n)} =
+  λ m. λ n. θ<n> (NatInd n) β (Λ n. λ ih. ρ+ ih - β).
+
+add-suc2 ◂ Π m : Nat. Π n : Nat. {add m (suc n) ≃ suc (add m n)} =
+  λ m. λ n. β.
+
+add-comm ◂ Π m : Nat. Π n : Nat. {add m n ≃ add n m} =
+  λ m. λ n. θ<n> (NatInd n)
+    (ρ (add-zero1 m) -
+     ρ (add-zero2 m) -
+     β)
+    (Λ n. λ ih. ρ (add-suc1 n m) -
+                ρ (add-suc2 m n) -
+                ρ ih -
+                β).
+
+add-assoc ◂ Π m : Nat. Π n : Nat. Π o : Nat. {add m (add n o) ≃ add (add m n) o} =
+  λ m. λ n. λ o. θ<o> (NatInd o)
+    (ρ (add-zero2 n) -
+     ρ (add-zero2 (add m n)) -
+     β)
+    (Λ o. λ ih. ρ (add-suc2 n o) -
+                ρ (add-suc2 m (add n o)) -
+                ρ (add-suc2 (add m n) o) -
+                ρ ih -
+                β).
+

@@ -1,0 +1,14 @@
+module Util.
+
+-- Obvious equality, so we can inhabit whatever term we want with β{...}
+Top ◂ ★ =
+  {β ≃ β}.
+
+-- Something of type X that must be equal to x
+Eq ◂ ★ ➔ Top ➔ ★ =
+  λ X : ★. λ x : Top. ι y : X. {y ≃ x}.
+
+-- Given any term x, something of type A that is provably equal to x,
+-- returns a term with the erasure of x but type A.
+phi ◂ ∀ A : ★. Π x : Top. Eq · A x ➾ A =
+  Λ A. λ x. Λ a. φ a.2 - a.1 {x}.

@@ -403,10 +403,26 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 
 \hspace{1cm}\begin{tikzpicture}
 
-\path (1,0) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](l){Emacs mode} ;
-\path (6,0) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](r){Backend} ;
+\path (1,2.5) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](emacsmode){Emacs mode} ;
+\path (6,2.5) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](backend){Backend} ;
 
-\draw[<->,very thick,red] (r.west) -- (l.east);
+\path (-1.3,4) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesa){{\tiny .ced files}} ;
+
+\draw[<->,very thick,black] (emacsmode.east) -- (backend.west);
+\draw[->,thick,black] (cedfilesa.south east) -- (emacsmode.north west);
+
+\pause
+
+\path (6,0) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesb){{\tiny .ced files}} ;
+
+\path (3.25,0) node[very thick,gray,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedillecore){{\tiny Cedille\textsubscript{core}}} ;
+\path (2.1,0.7) node[thick,gray,ellipse,draw,inner xsep=2pt,inner ysep=2pt](cedillecoreok){{\tiny Ok}} ;
+\path (2.1,-0.7) node[thick,gray,ellipse,draw,inner xsep=2pt,inner ysep=2pt](cedillecoreerr){{\tiny Error}} ;
+
+\draw[->,thick,black,dashed] (backend.south) -- (cedfilesb.north);
+\draw[->,thick,black] (cedfilesb.west) -- (cedillecore.east);
+\draw[->,thick,black] (cedillecore.north west) -- (cedillecoreok.south east);
+\draw[->,thick,black] (cedillecore.south west) -- (cedillecoreerr.north east);
 
 \end{tikzpicture}
 
