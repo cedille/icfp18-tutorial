@@ -117,11 +117,14 @@
 \begin{frame}
 
 \begin{center}
-{\Large
-  Introduction to Programming and \\
+{\huge
+  Introduction to Programming and
+
+\vspace{.1cm}
+
   Proving in Cedille }
 
-\vspace{.2cm}
+\vspace{.75cm}
 
 \includegraphics[width=3cm]{logo}
 
@@ -222,24 +225,178 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 \setlength{\TPVertModule}{.1cm}
 \setbeamercolor{mycolor}{fg=black,bg=white}
 
+\newcommand{\carbox}[4]{%
+\begin{tikzpicture}
+    \node at (0,0) {#1};
+    \node at (-2.68,-4.2) {\small \emph{#4}};
+    \pause
+    \node at #2 {#3};
+
+\end{tikzpicture}
+}
+
 \begin{frame}
   \frametitle{System F (Girard, Reynolds, early 1970s)}
 
-\begin{tikzpicture}
-    \node at (0,0) {\includegraphics[width=4in]{bonneville1}};
-    \pause
-    \node at (0,0) {\begin{minipage}{7cm}
-\begin{beamercolorbox}{mycolor}
+  \carbox{\includegraphics[width=4in]{bonneville1}}{(0,2.5)}{\begin{minipage}{7cm}
+  \begin{beamercolorbox}{mycolor}
         \begin{itemize}
-        \item Raw power (\textcolor{blue}{impredicativity!})
-        \item A little crude (\textcolor{red}{no Curry-Howard})
+        \item[$\myb$] $\forall\ X : \star.\ T$
+        \item[$\myb$] Raw power (\textcolor{blue}{impredicativity!})
+        \item[$\myb$] A little crude (\textcolor{red}{no Curry-Howard})
           \vspace{.25cm}
           \end{itemize}
-                    \end{beamercolorbox}\end{minipage}};
-\end{tikzpicture}
+                    \end{beamercolorbox}\end{minipage}}{1969 Mercury Cyclone Spoiler II}
+
     \end{frame}
 
+\begin{frame}
+  \frametitle{Calculus of Constructions (Coquand, Huet 1988)}
 
+  \carbox{\includegraphics[width=4in]{camaro}}{(0,2.4)}{\begin{minipage}{9cm}
+      \begin{beamercolorbox}{mycolor}
+        \begin{itemize}
+        \item[$\myb$] Add dependent types: $\Pi\ x : T.\ T'$
+        \item[$\myb$] Imported from Automath/Martin-L\"of type theory
+        \item[$\myb$] \textcolor{blue}{Curry-Howard!}
+        \item[$\myb$] \textcolor{red}{No induction.} [Geuvers 2001]
+        \end{itemize}
+        \end{beamercolorbox}\end{minipage}}{1988 Chevrolet Camaro}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Calculus of Inductive Constructions (Werner 1994)}
+
+  \carbox{\includegraphics[width=4in]{streamliner}}{(0,1.8)}{\begin{minipage}{9cm}
+      \begin{beamercolorbox}{mycolor}
+        \begin{itemize}
+        \item[$\myb$] Add primitive inductive types
+        \item[$\myb$] Finally ready for constructive mathematics!
+        \item[$\myb$] Basis for Coq
+        \end{itemize}
+        \end{beamercolorbox}\end{minipage}}{1992 Hoffman-Markley Streamliner}
+\end{frame}
+
+\begin{frame}
+  \frametitle{But Coq $\neq$ CIC}
+
+  \begin{itemize}
+  \item[$\myb$] Coinductive types
+  \item[$\myb$] Universe hierarchy (Extended CC, Luo 1990)
+  \item[$\myb$] Proof-irrelevant universe \texttt{Prop}
+  \item[$\myb$] \emph{And we might want more:}
+    \begin{itemize}
+    \item definitional proof irrelevance
+    \item inductive-inductive types
+    \item inductive-recursive types
+      \end{itemize}
+  \end{itemize}
+
+\vspace{.5cm}
+
+  Similarly, Agda $\neq$ MLTT.
+
+\vspace{.5cm}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Issues and limitations, Coq and Agda}
+
+  \begin{itemize}
+  \item[$\myb$] No formal semantics/correctness proof
+    \begin{itemize}
+    \item Despite a lot of interest: TT in TT
+      \end{itemize}
+
+\vspace{.1cm}
+
+  \item[$\myb$] (\textcolor{blue}{Hence!}) bugs and surprises
+    \begin{itemize}
+    \item[$\myb$] incompatibilities with various axioms
+    \item[$\myb$] actual contradictions!
+    \item[$\myb$] type soundness broken in Coq
+    \end{itemize}
+
+\vspace{.1cm}
+
+  \item[$\myb$] Commitment to a set of datatypes
+    \begin{itemize}
+      \item[$\myb$] theory of datatypes not finished...
+      \item[$\myb$] e.g., higher-order abstract syntax prohibited
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\newcommand{\monsterf}[1]{\begin{frame}
+  \frametitle{Have we created a monster?}
+
+  \includegraphics[width=4.5in]{#1}
+
+  {\small \emph{Schaufelradbagger 258}}
+
+\end{frame}
+}
+
+\monsterf{bagger258a}
+\monsterf{bagger258b}
+
+\begin{frame}
+  \frametitle{\emph{If I could turn back time...}}
+
+  \begin{columns}
+\hspace{.5cm}    \column{2.8in}
+
+  Good-bye to:
+
+  \begin{itemize}
+  \item[$\myb$] primitive datatypes
+  \item[$\myb$] (also universe hierarchy, my bias)
+  \end{itemize}
+
+\vspace{.2cm}
+
+  For this, hello to
+
+  \begin{itemize}
+  \item[$\myb$] lambda-encodings of data
+  \end{itemize}
+
+  \column{2.6in}
+  \onslide<2>{\includegraphics[width=1.8in]{cher}}
+  \end{columns}
+
+  \onslide<3>{\ }
+  \end{frame}
+
+\begin{frame}
+  \frametitle{\colorbox{black}{\textcolor{white}{Wanted}}: \textcolor{red}{a new type theory} }
+
+  where
+
+  \begin{itemize}
+  \item[$\myb$] inductive datatypes are \underline{derived} (lambda-encoded)
+  \item[$\myb$] impredicativity is central
+  \item[$\myb$] core theory is small and verifiable
+  \end{itemize}
+
+\vspace{.15cm}
+
+  Tooling goals:
+
+  \begin{itemize}
+  \item[$\myb$] see all typing/inference information 
+  \item[$\myb$] predictable inference
+  \item[$\myb$] elaborate to core with independent checker
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{This is Cedille}
+
+  \end{frame}
 
 \begin{frame}
   \frametitle{Architecture of Cedille}
