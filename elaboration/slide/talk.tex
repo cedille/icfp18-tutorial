@@ -46,6 +46,32 @@
 \newcommand{\nutt}[4]{\nu\, #1\! :\! #2 \, |\, #3.\, #4}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket} 
 \newcommand{\abs}[4]{{#1}\, #2\! : \! #3.\, #4}
+\newcommand{\myelabframe}[2]{
+\begin{itemize}
+\item Classify λ-terms \\
+\quad \mycedtext{\textcolor{cedillecolor}{λ x$.$ t}  $\leadsto$  \textcolor{cedillecorecolor}{λ x $:$ T$.$ t}}
+{#2}
+\item Insert inferred type arguments \\
+\quad \mycedtext{\textcolor{cedillecolor}{id zero}  $\leadsto$  \textcolor{cedillecorecolor}{id · Nat zero}}
+{#2}
+\item Provide dependent type of second projection in ι\hspace{0.02cm}-pairs \\
+\quad \mycedtext{\textcolor{cedillecolor}{[\! zero'$,$ zeroi\! ]} $\leadsto$ \textcolor{cedillecorecolor}{[\! zero'$,$ zeroi @ x$.$ NatI x\! ]}}
+{#2}
+\item Ensure β-terms supply both a term \mycedtext{u} for proving \mycedtext{\{ u $\simeq$ u \}} and one for erasure \\
+\quad \mycedtext{\textcolor{cedillecolor}{β}  $\leadsto$  \textcolor{cedillecorecolor}{β<u>\{λ x$.$ x\}}}
+{#2}
+\item Convert δ-contradictions to Church-encoded \mycedtext{\{ tt $\simeq$ ff \}} \\
+{\footnotesize \mycedtext{\textcolor{cedillecolor}{\{suc n $\simeq$ zero\}} $\leadsto$ \textcolor{cedillecorecolor}{\{suc n ff (λ \_$.$ tt) $\simeq$ zero ff (λ \_$.$ tt)\}}}}
+{#2}
+\item Specify where rewrites occur in ρ-terms \\
+\quad \mycedtext{\textcolor{cedillecolor}{ρ e $-$ t}  $\leadsto$  \textcolor{cedillecorecolor}{ρ e @ x$.$ T\textsubscript{x} $-$ t}}
+{#2}
+\begin{itemize}
+\item Rewriting {#1} guaranteed to preserve typeability!
+{#2}
+\end{itemize}
+\end{itemize}
+}
 
 % unicode
 \usepackage[utf8]{inputenc}
@@ -149,6 +175,7 @@
 \item ``C-i B'' -- Use selected node in beta-reduction buffer
 \pause
 \item ``C-i t'' -- Use selected node's type in beta-reduction buffer
+\pause
 \end{itemize}
 
 \end{itemize}
@@ -165,7 +192,7 @@
 \item ``C-i n'' -- Normalize and replace the selected node
 \item ``C-i h'' -- Head-normalize and replace the selected node
 \pause
-\item ``C-i r'' -- Prompt for proof of equation, and rewrite and replace the selected node with it
+\item ``C-i r'' -- Prompt for proof of equation, and rewrite the selected node with it
 \item ``C-i R'' -- Like ``C-i r'', but normalizes as it looks for matches (same as ρ+)
 \pause
 \item ``C-i ='' -- Prompt for expression, and replace the selected node with it if convertible
@@ -174,6 +201,7 @@
 \item ``C-i .'' -- Redo
 \pause
 \item ``C-i p'' -- Reconstruct a proof from each step taken so far
+\pause
 \end{itemize}
 
 \end{frame}
@@ -266,31 +294,7 @@
 
 \begin{frame}
 \frametitle{\textcolor{cedillecolor}{Cedille} $\leadsto$ \textcolor{cedillecorecolor}{Cedille Core}}
-
-\begin{itemize}
-\item Classify λ-terms \\
-\quad \mycedtext{\textcolor{cedillecolor}{λ x$.$ t}  $\leadsto$  \textcolor{cedillecorecolor}{λ x $:$ T$.$ t}}
-\pause
-\item Insert inferred type arguments \\
-\quad \mycedtext{\textcolor{cedillecolor}{id zero}  $\leadsto$  \textcolor{cedillecorecolor}{id · Nat zero}}
-\pause
-\item Provide dependent type of second projection in ι\hspace{0.02cm}-pairs \\
-\quad \mycedtext{\textcolor{cedillecolor}{[\! zero'$,$ zeroi\! ]} $\leadsto$ \textcolor{cedillecorecolor}{[\! zero'$,$ zeroi @ x$.$ NatI x\! ]}}
-\pause
-\item Ensure β-terms supply both a term \mycedtext{u} for proving \mycedtext{\{ u $\simeq$ u \}} and one for erasure \\
-\quad \mycedtext{\textcolor{cedillecolor}{β}  $\leadsto$  \textcolor{cedillecorecolor}{β<u>\{λ x$.$ x\}}}
-\pause
-\item Convert δ-contradictions to Church-encoded \mycedtext{\{ tt $\simeq$ ff \}} \\
-{\footnotesize \mycedtext{\textcolor{cedillecolor}{\{suc n $\simeq$ zero\}} $\leadsto$ \textcolor{cedillecorecolor}{\{suc n ff (λ \_$.$ tt) $\simeq$ zero ff (λ \_$.$ tt)\}}}}
-\pause
-\item Specify where rewrites occur in ρ-terms \\
-\quad \mycedtext{\textcolor{cedillecolor}{ρ e $-$ t}  $\leadsto$  \textcolor{cedillecorecolor}{ρ e @ x$.$ T\textsubscript{x} $-$ t}}
-\pause
-\begin{itemize}
-\item Rewriting is \uline{not} guaranteed to preserve types' kindability!
-\end{itemize}
-\end{itemize}
-
+\myelabframe{is \uline{not}}{\pause}
 \end{frame}
 
 
@@ -503,5 +507,10 @@
 \end{frame}
 
 
+\begin{frame}
+\frametitle{\textcolor{cedillecolor}{Cedille} $\leadsto$ \textcolor{cedillecorecolor}{Cedille Core}\textcolor{white}{Invisible}}
+\myelabframe{\uline{is}}{}
+
+\end{frame}
 
 \end{document}

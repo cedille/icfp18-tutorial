@@ -64,7 +64,7 @@ beta-reduction-example ◂
     Π m : Nat. Π n : Nat. Π o : Nat.
       { add m (add n o) ≃ add n (add m o) } =
   
-  λ m. λ n. λ o. ρ ς (add-assoc m n o) @ x . { x ≃ add n (add m o) } - ρ ς (add-assoc n m o) @ x . { (add (add m n) o) ≃ x } - ρ ς (add-comm n m) @ x . { (add (add m n) o) ≃ (add x o) } - β.
+  λ m. λ n. λ o. β.
 -- Navigate to β, then type "C-i t" to open the beta-reduction buffer with the
 -- expected type. You can navigate in the beta-reduction buffer just like in
 -- cedille-mode. With a node selected, you can perform the following commands:
