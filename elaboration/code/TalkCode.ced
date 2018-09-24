@@ -1,4 +1,4 @@
-module TalkCode (A : ★).
+module TalkCode.
 import Deps.
 
 
@@ -16,6 +16,40 @@ erase-me ◂ ∀ X : ★. Π x : X. ∀ n : Nat. {x ≃ n} ➾ Nat =
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {-
    Index of Addition Theorems
      add-zero1 : Π n     : Nat. { add zero n      ≃ n               }
@@ -30,7 +64,7 @@ beta-reduction-example ◂
     Π m : Nat. Π n : Nat. Π o : Nat.
       { add m (add n o) ≃ add n (add m o) } =
   
-  λ m. λ n. λ o. β.
+  λ m. λ n. λ o. ρ ς (add-assoc m n o) @ x . { x ≃ add n (add m o) } - ρ ς (add-assoc n m o) @ x . { (add (add m n) o) ≃ x } - ρ ς (add-comm n m) @ x . { (add (add m n) o) ≃ (add x o) } - β.
 -- Navigate to β, then type "C-i t" to open the beta-reduction buffer with the
 -- expected type. You can navigate in the beta-reduction buffer just like in
 -- cedille-mode. With a node selected, you can perform the following commands:
@@ -45,55 +79,82 @@ beta-reduction-example ◂
 -- Once both sides of the equation are equal, type "C-i p" to reconstruct the proof.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---------- Elaboration to Cedille Core ----------
 
-{- 
-   Cedille Core is an austere simplification of Cedille,
-   implemented in under 1000 lines of Haskell.
-   There are two significant differences between Cedille
-   and Cedille Core, both for the sake of simplicity:
-     1. No bidirectional checking; Core only synthesizes
-     2. No type-inference
--}
 
--- Example A: Lambda-abstractions always need to be annotated
+-- Example A: λ-abstractions always need to be annotated
 example-A ◂ ∀ X : ★. X ➔ X = Λ X. λ x. x.
---elabbed-A = Λ X : ★. λ x : X. x.
 
--- Example B: Infered type arguments need to be inserted
+-- Example B: Inferred type arguments need to be inserted
 example-B ◂ Nat = id zero.
---elabbed-B = id · Nat zero.
 
--- Example C: Rho-constructs need to specify where exactly the rewrites occur
-example-C ◂ Π w : Nat. {zero ≃ w} ➔ Matrix w w ➔ Matrix w zero = λ w. λ e. λ mx. ρ e - mx.
---elabbed-C = λ w : Nat. λ e : {zero ≃ w}. λ mx : Matrix w w. ρ ς e @ x. Matrix w x - mx.
+-- Example C: ι-pairs need to provide the dependent type of the second projection
+example-C ◂ Nat = [zero', zeroi].
 
--- Example D: Iota-pairs need to provide the dependent type of the second projection
-example-D ◂ Nat = [zero', zeroi].
---elabbed-D = [zero', zeroi @ x. NatI x].
+-- Example D: β needs to provide an untyped term t so it can prove { t ≃ t }, and another for erasure
+example-D ◂ ∀ T : ★. Π t : T. {t ≃ t} = Λ T. λ t. β.
 
--- Example E: Beta needs to provide an untyped term t so it can prove { t ≃ t }, and another for erasure
-example-E ◂ ∀ T : ★. Π t : T. {t ≃ t} = Λ T. λ t. β.
---elabbed-E = Λ T : ★. λ t : T. β<t>{λ x. x}.
+-- Example E: δ-contradictions need to be converted to { tt ≃ ff } / { λ t. λ f. t ≃ λ t. λ f. f }
+example-E ◂ Π n : Nat. { suc n ≃ zero } ➔ ∀ X : ★. X = λ n. λ e. Λ X. δ - e.
 
--- Example F: Delta contradictions need to be converted to { tt ≃ ff } / { λ t. λ f. t ≃ λ t. λ f. f }
-example-F ◂ Π n : Nat. { suc n ≃ zero } ➔ ∀ X : ★. X = λ n. λ e. Λ X. δ X - e.
---elabbed-F = λ n : Nat. λ e : { suc n ≃ zero }. Λ X : ★. δ X - ρ ς e @ x. {(λ y. y ff (λ ih. tt)) x ≃ (λ y. y ff (λ ih. tt)) zero} - β<(λ y. y ff (λ ih. tt)) zero>{λ x. x}.
-
--- Example G: Module parameters and arguments need to be expanded
-example-G ◂ A ➔ A = λ a. a.
---elabbed-G = Λ A : ★. λ a : A. a.
+-- Example F: ρ-terms need to specify where exactly the rewrites occur
+example-F ◂ Π w : Nat. {zero ≃ w} ➔ Matrix w w ➔ Matrix w zero = λ w. λ e. λ mx. ρ e - mx.
 
 
 ---------- Type-Preserving Rewrites ----------
 
-tpr-simple-example ◂
-    ∀ A : ★. ∀ a : A. {a ≃ λ x. x} ➾
-       ∀ C : A ➔ ★. C a ➔ C a
-  = Λ A. Λ a. Λ e. Λ C. ρ e - λ c. id c.
 
-tpr-complex-example ◂
+tpr-problem-A ◂
+    ∀ A : ★. ∀ a : A. {a ≃ λ x. x} ➾
+       ∀ B : A ➔ ★. B a ➔ B a
+  = Λ A. Λ a. Λ e. Λ B. ρ e - λ b. b.
+
+tpr-problem-B ◂
     ∀ A : ★. ∀ a : A. ∀ a' : A. ∀ e : {a ≃ a'}. {a ≃ λ x. x} ➾
-      ∀ C : Π a : A. Π a' : A. {a ≃ a'} ➔ ★. C a a' e ➔ C a a' e
-  = Λ A. Λ a. Λ a'. Λ e. Λ e'. Λ C. ρ e' - λ c. id c.
+      ∀ B : Π a : A. Π a' : A. {a ≃ a'} ➔ ★. B a a' e ➔ B a a' e
+  = Λ A. Λ a. Λ a'. Λ e. Λ e'. Λ B. ρ e' - λ b. b.
 
