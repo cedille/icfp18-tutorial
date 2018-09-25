@@ -9,6 +9,7 @@
 
 \usepackage{tikz}
 \usepackage{graphicx}
+\usepackage{tabu}
 %\usepackage{epstopdf}
 \usepackage{color}
 %\usepackage{tabularx}
@@ -83,6 +84,7 @@
 
 \newcommand{\fore}[0]{\ensuremath{F_\omega^{\textit{rec}}}}
 
+\mathchardef\mhyph="2D % Define a "math hyphen"
 
 \mode<presentation>
 {
@@ -139,7 +141,8 @@ Computer Science
 
 The University of Iowa
 
-Iowa City, Iowa}
+Iowa City, Iowa
+}
 
 \end{center}
 \end{frame}
@@ -357,7 +360,7 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 
 \vspace{.2cm}
 
-  For this, hello to
+  Hello to
 
   \begin{itemize}
   \item[$\myb$] lambda-encodings of data
@@ -394,9 +397,529 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 \end{frame}
 
 \begin{frame}
-  \frametitle{This is Cedille}
+  \frametitle{Introducing Cedille}
+\begin{center}
+
+  \begin{tikzpicture}
+    \path (0,.3) node[ellipse,inner xsep=22pt,draw,inner ysep=5pt,red,thick](cc){\large CC} ;
+    \path (0,-1) node[ellipse,inner xsep=100pt,draw,inner ysep=40pt,blue,thick](extcirc){\ };
+    \path (0,-1.3) node{\color{blue}
+        \begin{tabular}{ll}
+          $\forall\ x : T.\ T'$ & implicit products (Miquel) \\
+          $\iota\ x : T .\ T'$ & dependent intersections (Kopylov) \\
+          $\{\ t \simeq t' \}$ & untyped equality
+          \end{tabular}};
+    \end{tikzpicture}
+
+  \begin{itemize}
+  \item[$\myb$] Small theory, formal syntax and semantics
+  \item[$\myb$] Core checker implemented in $<1000$loc Haskell
+  \item[$\myb$] Logically sound
+  \item[$\myb$] Turing complete(!)
+  \item[$\myb$] Supports inductive lambda-encodings
+    \end{itemize}
+
+\end{center}
 
   \end{frame}
+
+\begin{frame}
+  \frametitle{Back the truck up}
+  \pause
+\vspace{2cm}
+\begin{tikzpicture}
+    \node at (0,0) {\includegraphics[width=4.3in]{bonnevillestuck}};
+    \node at (0,2) {\begin{minipage}{8cm}\Large \color{white}Did you say lambda encodings?\end{minipage}};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Not your forebear's lambda encodings}
+
+  \begin{itemize}
+  \item[$\myb$] Usual rap: inefficient accessors
+  \item[$\myb$] Corrected by Parigot 1988 for typed encoding
+  \item[$\myb$] \underline{Perfect} untyped encoding B\"ohm et al. 1994
+    \begin{itemize}
+    \item linear space
+    \item constant-time accessors
+    \item intrinsic support for iteration
+    \end{itemize}
+  \item[$\myb$] Cedille: perfect inductive (typed) encodings
+  \end{itemize}
+
+  \end{frame}
+
+\begin{frame}
+  \frametitle{What do we get from this?}
+  
+\begin{tikzpicture}
+    \node at (0,0) {\includegraphics[width=4.3in]{Big-sky-Wyoming}};
+\pause
+\node at (0,2) {\begin{minipage}{8cm}
+\vspace{1cm}
+    
+\Large \color{white}\emph{Freedom}
+
+\pause
+
+\vspace{1cm}
+
+    \begin{beamercolorbox}{mycolor}
+\normalsize
+      \begin{itemize}
+      \item[$\myb$] No pre-set datatype class
+      \item[$\myb$] Explore semantics of advanced datatypes
+      \item[$\myb$] \emph{Power of impredicativity}
+      \item[$\myb$] So far: Functorial, IR, II
+      \end{itemize}
+      \end{beamercolorbox}
+\end{minipage}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+  \frametitle{So which car are we?}
+
+  \pause
+
+\begin{tikzpicture}
+    \node at (0,0) {\includegraphics[width=4.3in]{glider}};
+\pause
+\node at (0,3) {\begin{minipage}{8cm}
+\vspace{1cm}
+    
+\large \color{white}Elegant, at present a little in the clouds
+\end{minipage}};
+\end{tikzpicture}
+
+  \end{frame}
+
+\begin{frame}
+\begin{center}
+{
+  \Huge
+  $\vdash \textit{\textcolor{red}{C}e\textcolor{red}{D}il\textcolor{red}{LE}}$
+}
+
+\vspace{1cm}
+
+\Large
+
+\textcolor{red}{Syntax and semantics of Cedille}
+\end{center}
+\end{frame}
+
+
+\tabulinesep=1.2mm
+
+\begin{frame}
+  \frametitle{\textcolor{black}{Types $T$} and \textcolor{blue}{kinds $\kappa$}}
+  \begin{tabu}{l|l}
+
+$\forall\ X : \kappa.\ T$ & Impredicative quantification
+
+\\
+\hline
+
+$\lambda\ X : \kappa.\ T$ & Type-level function with type input
+
+\\
+\hline
+    $\lambda\ x : T.\ T'$ & Type-level function with term input \\
+
+\hline
+$T\ T'$ & Type-level application to a type \\
+
+\hline
+$T\ t$ & Type-level application to a term \\
+
+\hline
+$\Pi\ x : T.\ T'$ & Dependent function type \\
+\hline
+$\forall\ x : T.\ T'$ & Implicit product \\
+\hline
+$\iota\ x : T.\ T'$ & Dependent intersection \\
+\hline
+$\{\ t \simeq t'\ \}$ & Untyped equality 
+\end{tabu}
+
+\vspace{.2cm}
+
+\color{blue}
+\begin{tabu}{l|l}
+    $\star$ & Kind for types \\
+    \hline
+    $\Pi\ x : T.\ \kappa\hspace{.2cm} $ & Kind for predicates on terms \\
+    \hline
+    $\Pi\ X : \kappa. \ \kappa'$ & Kind for predicates on types
+\end{tabu}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Dependent intersections $\iota\ x:T_1.\ T_2$}
+
+  \begin{itemize}
+  \item[$\myb$] Usual intersection types:
+
+    \[
+    \infer{t : T_1 \cap T_2}{t : T_1 \qquad t : T_2}
+    \]
+
+    \item[$\myb$] Dependent intersection:
+
+    \[
+    \infer{t : \iota\ x : T_1 .\ T_2}{t : T_1 \qquad t : [t/x]T_2}
+    \]
+
+  \end{itemize}
+  
+\vspace{.3cm}
+
+  \begin{center}
+    \color{purple}
+    \fbox{$T_2$ can refer to subject of typing, at weaker type $T_1$}
+  \end{center}
+  \end{frame}
+
+\begin{frame}
+  \frametitle{But if you are using intersections...\raisebox{-.15\height}{\includegraphics[width=.7cm]{lightbulb}}}
+
+  \pause
+
+  You must have an \textcolor{red}{extrinsic} (Curry-style) type theory.
+
+  \vspace{.25cm}
+
+  \begin{itemize}
+\pause
+  \item[$\myb$] Unannotated terms of pure lambda calculus
+\pause
+  \item[$\myb$] Assign multiple different types to same term
+
+ (Intrinsic type theories usually have unique types.)
+
+\pause
+  \item[$\myb$] Completely different from Coq, Agda
+\pause
+  \item[$\myb$] Much less explored TT...
+  \end{itemize}
+  
+
+  \pause
+
+\vspace{1cm}
+
+  {\Large \color{red} Yes!}
+\end{frame}
+  
+\begin{frame}
+  \frametitle{For each type}
+
+  \begin{itemize}
+  \item[$\myb$] Formation rule for the type
+{\small
+    \[
+    \infer{\Gamma\vdash \forall\ x : T'.\ T : \star}{\Gamma\vdash T':\star \qquad \Gamma,x:T'\vdash T : \star}
+    \]
+}
+
+\vspace{-.5cm}
+
+  \item[$\myb$] Introduction and elimination rules
+{\small
+    \[
+    \begin{array}{ll}
+      \infer{\Gamma \vdash t : \forall\ x : T'.\ T}{\Gamma \vdash \forall\ x : T' .\ T : \star \qquad \Gamma, {\color{red}x : T'} \vdash t : T} &
+    \infer{\Gamma\vdash t : [t'/x]T}{\Gamma \vdash t : \forall\ x : T'.\ T \qquad \Gamma \vdash {\color{blue}t' : T'}}      
+    \end{array}
+    \]
+}
+     
+\vspace{-.25cm}
+
+  \item[$\myb$] Annotated terms
+
+    \begin{itemize}
+    \item Introduction: ${\color{red}\Lambda\ x : T'.}\ t$
+    \item Elimination: $t\ {\color{blue}-t'}$
+    \end{itemize}
+
+\vspace{.2cm}
+
+  \item[$\myb$] Annotated terms erase to pure lambda terms
+    \begin{eqnarray*}
+      |\Lambda\ x : T.\ t| & = & |t| \\
+      |t\ \mhyph t'| & = & |t|
+    \end{eqnarray*}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Equality type}
+
+  \underline{Formation:}
+  \[
+  \infer{\Gamma \vdash \{ t \simeq t' \} : \star}{\textit{FV}(t\ t')\subseteq\textit{dom}(\Gamma)}
+  \]
+
+  \underline{Introduction and elimination:}
+  \[
+  \begin{array}{ll}
+    \infer{\Gamma\vdash \textcolor{blue}{t} : \{ t' \simeq t'\}}{\textit{FV}(t')\subseteq\textit{dom}(\Gamma)}
+    &
+    \infer{\Gamma\vdash t : [t_2/x]T}{\Gamma\vdash t' : \{ t_1\simeq t_2\} \qquad \Gamma\vdash t : [t_1/x]T}
+  \end{array}
+  \]
+
+  \underline{Direct computation rule:}
+  \[
+  \infer{\Gamma\vdash t_2 : T}{\Gamma\vdash t : \{ t_1 \simeq t_2\} \qquad \Gamma\vdash t_1 : T}
+  \]
+
+  \underline{Annotations:}
+  \begin{eqnarray*}
+    |\beta\{\textcolor{blue}{t}\}| & = & |t| \\
+    |\rho\ t'\ \mhyph\ t| & = & |t| \\
+    |\phi\ t\ \mhyph\ t_1\{t_2\}| & = & |t_2|
+  \end{eqnarray*}
+
+  \vspace{.1cm}
+
+\pause
+
+  {\color{purple}
+    \large
+    \fbox{Kleene trick: true equations can be assigned to any term}}
+
+\vspace{-3.5cm}
+
+\hspace{2.2cm}  \begin{tikzpicture}
+  \draw[->,very thick,purple] (3.5,-2.1) -- (-0.77,.7);
+  \end{tikzpicture}
+  
+\end{frame}  
+
+\begin{frame}
+  \frametitle{Dependent intersections}
+
+  \underline{Formation:}
+  \[
+  \infer{\Gamma\vdash \iota\ x:T.\ T'}{\Gamma\vdash T:\star \qquad \Gamma,x:T\vdash T':\star}
+  \]
+
+  \underline{Introduction and elimination:}
+  \[
+  \begin{array}{ll}
+  \infer{\Gamma\vdash t : \iota\ x:T.\ T'}{\Gamma\vdash t : T \qquad \Gamma\vdash \textcolor{blue}{t} : [t/x]T'}
+  &
+  \infer{\Gamma\vdash t : T}{\Gamma\vdash t : \iota\ x:T.\ T'} \ \
+  \infer{\Gamma\vdash t : [t/x]T'}{\Gamma\vdash t : \iota\ x:T.\ T'}
+  \end{array}
+  \]
+
+  \underline{Annotations:}
+  \begin{eqnarray*}
+    |[t,\textcolor{blue}{t'}]| & = & |t| \\
+    |t.1| & = & |t| \\
+    |t.2| & = & |t|
+  \end{eqnarray*}
+\end{frame}
+
+\begin{frame}
+  \frametitle{How are inductive datatypes defined?}
+
+  \begin{itemize}
+  \item[$\myb$] Many variations, one theme:
+
+    \vspace{.2cm}
+    
+{\color{blue}
+    The type of $d$ expresses an induction principle for $d$ 
+}
+
+    \vspace{.2cm}
+
+
+  \item[$\myb$] For Nat:
+    \[
+    n\ :\ \forall\ P : \textit{Nat} \to \star.\ (\forall\ x:\textit{Nat}.\ P\ x \to P\ (S\ x)) \to P\ Z \to P\ n
+    \]
+    
+  \item[$\myb$] Essentially due to Leivant 1983
+  \item[$\myb$] Will walk through example a little later
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Another example: casts}
+
+  \begin{itemize}
+  \item[$\myb$] A cast is an identity function from A to B
+
+{\small
+\begin{verbatim}
+Cast ◂ ★ ➔ ★ ➔ ★ = λ A : ★ . λ B : ★ .
+   ι cast : A ➔ B . { cast ≃ λ x . x }.
+\end{verbatim}
+}
+
+\item[$\myb$] If there is a cast, you can change the type:
+
+{\small
+\begin{verbatim}
+cast ◂ ∀ A : ★ . ∀ B : ★ . Cast · A · B ➾ A ➔ B 
+  = ...
+\end{verbatim}
+}
+
+\item[$\myb$] Nontrivial casts exist in extrinsic type theory:
+
+\vspace{-.2cm}
+
+\[ {\color{red}\lambda\ x.\,x} \ \ : \ \ (\abs{\forall}{X}{\star}{X\to X}) \to (\textit{Nat} \to \textit{Nat}) \]
+
+\item[$\myb$] Not in intrinsic type theory:
+
+\vspace{-.2cm}
+
+\[ {\color{red}\lambda\ x.\,(x \cdot \textit{Nat})} \ \ : \ \ (\abs{\forall}{X}{\star}{X\to X}) \to (\textit{Nat} \to \textit{Nat}) \]
+
+  \end{itemize}
+
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Monotone recursive types}
+
+  \begin{itemize}
+  \item[$\myb$] Explored in works by R. Matthes \textcolor{purple}{[eg, in Synthese, 2002]}
+
+\vspace{.1cm}
+
+  \item[$\myb$] Given \underline{monotone} $F$, extend the theory with $\mu F$
+
+\vspace{.1cm}
+
+  \item[$\myb$] Monotonicity expressed by a term t of type
+
+\vspace{.2cm}
+
+    \hspace{.1cm} $ \abs{\forall}{X}{\star}{\abs{\forall}{Y}{\star}{(X \to Y) \to (F\cdot X \to F\cdot Y)}} $
+
+\vspace{.1cm}
+
+  \item[$\myb$] Matthes considers how to extend theory, retaining SN
+
+    \pause
+
+\vspace{1cm}
+
+{\large
+    \textcolor{blue}{\emph{We can derive a stronger form, within our theory!}}
+}
+  \end{itemize}
+ \end{frame}
+        
+\begin{frame}
+  \frametitle{Starting point: proof of Tarski's Theorem}
+
+  Consider monotone $f : \mathcal{P}(X) \to \mathcal{P}(X)$
+
+\vspace{.2cm}
+
+  Let $Q = \bigcap\{ A\ |\ f(A) \subseteq A\}$
+
+\vspace{.2cm}
+
+  Prove $f(Q) = Q$ by both inclusions:
+
+  \begin{enumerate}
+  \item[$\myb$] For $f(Q)\subseteq Q$, show $f(Q) \subseteq A$ for all $f(A) \subseteq A$
+    \begin{itemize}
+    \item[$\myb$] Assume $A$ s.t. $f(A) \subseteq A$.
+    \item[$\myb$] $Q\subseteq A$
+    \item[$\myb$] $f(Q)\subseteq f(A)$ by mono.
+    \item[$\myb$] $f(A) \subseteq A$
+    \end{itemize}
+
+\vspace{.1cm}
+
+  \item[$\myb$] Now by mono., $f(f(Q))\subseteq f(Q)$, so $f(Q)\in\{A\ |\ f(A)\subseteq A\}$
+    \begin{itemize}
+    \item[$\myb$] Hence $Q\subseteq f(Q)$
+      \end{itemize}
+  \end{enumerate}
+  \end{frame}
+    
+\begin{frame}[containsverbatim]
+  \frametitle{Translating the proof to Cedille}
+
+  \begin{itemize}
+  \item[$\myb$] ``$A \subseteq B$'' becomes \verb|Cast · A · B|
+  \item[$\myb$] Monotonicity becomes
+
+    {\footnotesize
+\begin{verbatim}
+∀ X : ★ . ∀ Y : ★ . 
+Cast · X · Y ➔ Cast · (F · X) · (F · Y) 
+\end{verbatim}
+}
+  \item[$\myb$] ``$\bigcap\{ A\ |\ f(A) \subseteq A\}$'' becomes
+
+{\footnotesize
+\begin{verbatim}
+Rec = ∀ X : ★ . Cast · (F · X) · X ➾ X 
+\end{verbatim}
+}
+
+\item[$\myb$] ``$f(Q)\subseteq Q$'' becomes
+
+{\footnotesize
+\begin{verbatim}
+Cast · (F · Rec)) · Rec 
+\end{verbatim}
+}
+
+\item[$\myb$] similarly for ``$Q\subseteq f(Q)$'':
+
+{\footnotesize
+\begin{verbatim}
+Cast · Rec · (F · Rec)
+\end{verbatim}
+}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Monotone recursive types: summary}
+
+  \begin{itemize}
+  \item[$\myb$] Derive \verb|Rec| for any montone \verb|F|
+    \item[$\myb$] Casts (identity functions) between \verb|F · Rec| and \verb|Rec|
+    \item[$\myb$] Proof translates proof of Tarski fixed-point theorem
+    \item[$\myb$] Code is 18 lines of Cedille
+\item[$\myb$] \underline{To emphasize:} no addition to the theory, these are derived
+      \end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+{  \Huge
+\texttt{cedille}}
+
+  \vspace{1cm}
+
+{\Large
+  \textcolor{red}{Tooling: emacs frontend $\leftrightarrow$ backend}
+}
+  \end{center}
+
+\end{frame}
+
 
 \begin{frame}
   \frametitle{Architecture of Cedille}
@@ -406,18 +929,18 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 \path (1,2.5) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](emacsmode){Emacs mode} ;
 \path (6,2.5) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](backend){Backend} ;
 
-\path (-1.3,4) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesa){{\tiny .ced files}} ;
+\path (-1.3,4) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesa){{\small .ced files}} ;
 
 \draw[<->,very thick,black] (emacsmode.east) -- (backend.west);
 \draw[->,thick,black] (cedfilesa.south east) -- (emacsmode.north west);
 
 \pause
 
-\path (6,0) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesb){{\tiny .ced files}} ;
+\path (6,0) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesb){{\small .ced files}} ;
 
-\path (3.25,0) node[very thick,gray,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedillecore){{\tiny Cedille\textsubscript{core}}} ;
-\path (2.1,0.7) node[thick,gray,ellipse,draw,inner xsep=2pt,inner ysep=2pt](cedillecoreok){{\tiny Ok}} ;
-\path (2.1,-0.7) node[thick,gray,ellipse,draw,inner xsep=2pt,inner ysep=2pt](cedillecoreerr){{\tiny Error}} ;
+\path (3.25,0) node[very thick,gray,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedillecore){{\small Cedille\textsubscript{core}}} ;
+\path (1.6,0.7) node[thick,gray,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreok){{\small Ok}} ;
+\path (1.6,-0.7) node[thick,gray,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreerr){{\small Error}} ;
 
 \draw[->,thick,black,dashed] (backend.south) -- (cedfilesb.north);
 \draw[->,thick,black] (cedfilesb.west) -- (cedillecore.east);
@@ -429,35 +952,51 @@ $\leadsto\ \texttt{cedille}_{\texttt{core}}$ & \ & \textcolor{#1}{Elaboration to
 \end{frame}
 
 \begin{frame}
-\frametitle{Emacs mode (\emph{to be revised})}
+\frametitle{Emacs mode}
 
 \begin{itemize}
-\item Cedille has an emacs mode for editing Cedille files
-\item Based on a generic structured-editing mode by Carl Olson
+\item[$\myb$] Interact with Cedille through an emacs mode
 
 \vspace{.25cm}
 
-\hspace{1cm}\begin{tikzpicture}
+\begin{tikzpicture}
 
-\path (1,0) node[very thick,blue,rectangle,draw,inner xsep=5pt,inner ysep=20pt](l){Emacs mode} ;
-\path (6,0) node[very thick,red,rectangle,draw,inner xsep=5pt,inner ysep=20pt](r){Backend} ;
+\path (1,2.5) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](emacsmode){Emacs mode} ;
+\path (6,2.5) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](backend){Backend} ;
 
-\draw[->,very thick,blue] (2.3,0.5) -| node[pos=0.25,above] {\texttt{nat.ced}} (5.0,0.5);
-\draw[->,very thick,red] (r.west) -| node[pos=0.25,below] {\textit{spans}} (l.east);
+\path (-1.3,4) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesa){{\small \texttt{nat.ced}}} ;
+
+\draw[->,thick,black] (cedfilesa.south east) -- (emacsmode.north west);
+\onslide<1>{\draw[->,very thick,black] (emacsmode.east) -- node[pos=0.5,above]{\small \texttt{nat.ced}} (backend.west);}
+\onslide<2>{\draw[<-,very thick,black] (emacsmode.east) -- node[pos=0.5,above]{\small spans} (backend.west);}
 
 \end{tikzpicture}
 
+\pause
 \vspace{.1cm}
 
-\item A span is $[\textit{label},\textit{start-pos},\textit{end-pos},\textit{attributes}]$
+\item[$\myb$] A span is $[\textit{label},\textit{start-pos},\textit{end-pos},\textit{attributes}]$
 
-\item Spans communicated in JSON
+\item[$\myb$] Spans communicated in JSON
 
-\item Cedille sends \underline{all} type information, in span attributes
+\item[$\myb$] Cedille sends \underline{all} type information, in span attributes
 
-\item Monadic style for writing the backend (type checker)
+\item[$\myb$] Monadic style for writing the backend (type checker)
 
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\begin{center}
+\vspace{3cm}
+{  \Huge
+Demo \texttt{cedille}}
+
+  \vspace{1cm}
+
+  \end{center}
+
+\end{frame}
+
 
 \end{document}
