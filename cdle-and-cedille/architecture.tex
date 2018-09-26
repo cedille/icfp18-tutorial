@@ -1,10 +1,13 @@
-\begin{frame}
-  \frametitle{Architecture of Cedille}
+% Include these with color definitinons
+\definecolor{colorcedcore}{RGB}{0,128,255}
+\definecolor{colorcedmode}{RGB}{128,0,255}
 
-\hspace{1cm}\begin{tikzpicture}
 
-\path (1,2.5) node[very thick,blue,ellipse,draw,inner xsep=5pt,inner ysep=20pt](emacsmode){Emacs mode} ;
-\path (6,2.5) node[very thick,red,ellipse,draw,inner xsep=5pt,inner ysep=20pt](backend){Backend} ;
+\hspace{1cm}
+\begin{tikzpicture}
+
+\path (1,2.5) node[very thick,colorcedmode,ellipse,draw,inner xsep=5pt,inner ysep=20pt](emacsmode){Emacs mode} ;
+\path (6,2.5) node[very thick,colorced,ellipse,draw,inner xsep=5pt,inner ysep=20pt](backend){Backend} ;
 
 \path (-1.3,4) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesa){{\small .ced files}} ;
 
@@ -15,9 +18,9 @@
 
 \path (6,0) node[thick,orange,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedfilesb){{\small .ced files}} ;
 
-\path (3.25,0) node[very thick,gray,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedillecore){{\small Cedille\textsubscript{core}}} ;
-\path (1.6,0.7) node[thick,gray,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreok){{\small Ok}} ;
-\path (1.6,-0.7) node[thick,gray,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreerr){{\small Error}} ;
+\path (2.5,0) node[very thick,colorcedcore,ellipse,draw,inner xsep=3pt,inner ysep=6pt](cedillecore){{\small Cedille\textsubscript{core}}} ;
+\path (0.9,0.7) node[thick,colorcedcore,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreok){{\small Ok}} ;
+\path (0.75,-0.7) node[thick,colorcedcore,ellipse,inner xsep=2pt,inner ysep=2pt](cedillecoreerr){{\small Error}} ;
 
 \draw[->,thick,black,dashed] (backend.south) -- (cedfilesb.north);
 \draw[->,thick,black] (cedfilesb.west) -- (cedillecore.east);
@@ -25,5 +28,3 @@
 \draw[->,thick,black] (cedillecore.south west) -- (cedillecoreerr.north east);
 
 \end{tikzpicture}
-
-\end{frame}

@@ -1,0 +1,145 @@
+module TalkCode.
+import Deps.
+
+
+---------- Interactive Commands ----------
+
+-- "C-i n" - Print the selected node's normalization; if nothing is selected, prompt instead
+-- "C-i h" - Same as "C-i n", but only head-normalizes
+-- "C-i e" - Same as "C-i n", but only erases
+
+normalize-me ◂ { add ≃ add } = β{(λ x. x x) (λ y. y (λ x. y))}.
+
+erase-me = id · Nat zero.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{-
+   Some Addition Theorems
+     add-comm  : Π m n   : Nat. { add m n         ≃ add n m         }
+     add-assoc : Π m n o : Nat. { add m (add n o) ≃ add (add m n) o }
+-}
+beta-reduction-example ◂
+  
+    Π m : Nat. Π n : Nat. Π o : Nat.
+      { add m (add n o) ≃ add n (add m o) } =
+  
+  λ m. λ n. λ o. ρ ς (add-assoc m n o) @ x . { x ≃ add n (add m o) } - ρ ς (add-assoc n m o) @ x . { (add (add m n) o) ≃ x } - ρ ς (add-comm n m) @ x . { (add (add m n) o) ≃ (add x o) } - β.
+-- Navigate to β, then type "C-i t" to open the beta-reduction buffer with the
+-- expected type. You can navigate in the beta-reduction buffer just like in
+-- cedille-mode. With a node selected, you can perform the following commands:
+-- "C-i n" - Normalize the node
+-- "C-i h" - Head-normalize the node
+-- "C-i r" - Input a TERM, and rewrite the node using the term's synthesized equation type
+
+-- Once both sides of the equation are equal, type "C-i p" to reconstruct the proof.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------- Cedille ↝ Cedille Core ----------
+-------------- (Elaboration) ---------------
+
+-- Type "E" to see how these are elaborated to Cedille Core
+
+λ-terms ◂ ∀ X : ★. X ➔ X = Λ X. λ x. x.
+
+ι-pairs ◂ Nat = [zero', zeroi].
+
+β-terms ◂ ∀ T : ★. Π t : T. {t ≃ t} = Λ T. λ t. β.
+
+δ-contradictions ◂ Π n : Nat. { suc n ≃ zero } ➔ ∀ X : ★. X = λ n. λ e. Λ X. δ - e.
+
+ρ-terms ◂ Π w : Nat. {zero ≃ w} ➔ Matrix w w ➔ Matrix w zero = λ w. λ e. λ mx. ρ e - mx.
+
+ρ-terms-1 ◂
+    ∀ A : ★. ∀ a : A. {a ≃ λ x. x x} ➾
+       ∀ B : A ➔ ★. B a ➔ B a
+  = Λ A. Λ a. Λ e. Λ B.
+      ρ e - λ b. b.
+
+ρ-terms-2 ◂
+    ∀ A : ★. ∀ B : Π y : A. Π z : A. {y ≃ z} ➔ ★. 
+      ∀ a : A. ∀ a' : A. ∀ e : {a ≃ a'}. ∀ p : {a ≃ λ x. x x}.
+        B a a' e ➔ B a a' e
+  = Λ A. Λ B. Λ a. Λ a'. Λ e. Λ p.
+      ρ p - λ b. b.
+
+type-inference ◂ Nat = id zero.
+
