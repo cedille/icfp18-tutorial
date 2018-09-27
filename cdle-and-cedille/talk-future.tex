@@ -119,6 +119,20 @@
 \begin{frame}
 \begin{center}
   \Huge
+  Lab
+
+  \vspace{1cm}
+
+
+  
+
+  \end{center}
+
+\end{frame}
+
+\begin{frame}
+\begin{center}
+  \Huge
 \includegraphics[width=4cm]{cedillespiral}
 
   \vspace{1cm}
@@ -166,7 +180,7 @@
 
     \draw[thick,purple] (-1.9,3.75) rectangle (1.9,3.2);
 
-    \draw[thick,purple] (-2.1,6.25) rectangle (2.1,5.7);
+%    \draw[thick,purple] (-2.1,6.25) rectangle (2.1,5.7);
 
 
   \end{tikzpicture}
@@ -175,7 +189,27 @@
   \end{frame}
         
 \begin{frame}
-  \frametitle{Extensionality?}
+  \frametitle{Datatype notations (Cedille 1.1)}
+
+  \begin{itemize}
+  \item[$\myb$] High-level notation (like Coq/Agda) for
+    \begin{itemize}
+    \item Declaring datatypes
+    \item Pattern-matching recursion
+    \end{itemize}
+\vspace{.18cm}
+  \item[$\myb$] Elaboration to pure lambda calculus!
+\vspace{.2cm}
+  \item[$\myb$] The theory we have supports
+    \begin{itemize}
+    \item Provably monotone datatypes
+    \item Histomorphic recursion
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Seeking extensionality}
 
 \Large
 
@@ -235,7 +269,7 @@
   Currently:
   \[
   \begin{array}{c}
-    \{ t \simeq t'\ @\ T\} \\ \\
+    \{ t \simeq t'\} \\ \\
     \interp{\{ t \simeq t'\}} \ \ = \ \ \{ \hat{t}\ |\ \interp{t} =_{\beta\eta} \interp{t'} \}
     \end{array}
   \]
@@ -288,7 +322,7 @@
   \textit{True}\ \ =\ \ \forall\ X:\star.\ X \to X
   \]
 
-  The following are Equal at type $\textit{True}\to\textit{True}$:
+  The following are equal at type $\textit{True}\to\textit{True}$:
   \[
   \begin{array}{l}
     \lambda\,s.\,\lambda\,z.\, s\ (s\ (z\ \lambda\, q.\,q))\\ \\
@@ -319,9 +353,35 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle
+  \frametitle{Sequent calculus?}
+
+  \begin{itemize}
+  \item[$\myb$] Good formalism for duality
+
+\vspace{.2cm}
+
+\item[$\myb$] Under CH, supports control
+
+  \vspace{.2cm}
+
+\item[$\myb$] Challenge: retain canonicity
+
+  \begin{itemize}
+  \item BiInt adds dual to subtraction, loses disjunction property
+  \item With T. Cantor: logic $\textbf{2Int}^{x}$
+  \end{itemize}
+
+  \vspace{.2cm}
+
+  \item[$\myb$] Motivation: coinduction dual to induction
+\end{itemize}
 
 \end{frame}
+
+\input{planslide}
+
+\planslide{red}{Recap}
+
 
 \begin{frame}
   \frametitle{Thanks}
@@ -345,10 +405,6 @@
 
 \end{frame}
 
-
-\input{planslide}
-
-\planslide{red}{Recap}
 
 \begin{frame}
 \begin{center}
