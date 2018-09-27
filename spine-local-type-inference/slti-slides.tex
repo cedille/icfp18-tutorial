@@ -1,0 +1,466 @@
+\documentclass{beamer}
+\usetheme{Boadilla}
+
+\usepackage[utf8]{inputenc}
+\usepackage[greek,english]{babel}
+
+\usepackage{subcaption}
+
+\usepackage{proof}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{syntax}
+\usepackage{float}
+\usepackage{moresize}
+\usepackage{verbatim}
+\usepackage{graphicx}
+
+\usepackage{soul}
+
+\input{../../share/slti-macros2}
+
+\graphicspath{ { ./ }}
+
+\newcommand{\lineheight}{\textcolor{white}{()\ensuremath{\forall}}}
+\newcommand{\mklheight}[1]{\textcolor{white}{#1}}
+
+\title{Spine-local Type Inference in Cedille}
+% \subtitle{and Contextual Type-argument Inference}
+\author[Jenkins, Stump]{Christopher Jenkins and Aaron Stump}
+\institute[CS, U. Iowa]{Computer Science \\ University of Iowa}
+\date{ICFP '18 (Cedille Tutorial)}
+
+% Nice `orientation' slide
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+\beamertemplatenavigationsymbolsempty
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Background and Motivation}
+\subsection{Local Type Inference}
+\begin{frame}
+  \frametitle{What is ``Local Type Inference''?}
+
+  \begin{itemize}
+  \item Uses two main techniques
+    \begin{itemize}
+    \item \textit{Bidirectional typing rules:}
+     \uncover<2->{
+      \[
+        \begin{array}{rclcr}
+          \text{Synthesis mode:}
+          & \ 
+          & \aabs{\lambda}{x}{Nat}{x} & \textcolor{blue}{\Uparrow} & \textcolor{blue}{Nat \to Nat}
+          \\ \text{Checking mode:}
+          & 
+          & \abs{\lambda}{x}{x} & \textcolor{red}{\Downarrow} & \textcolor{red}{Nat \to Nat}
+        \end{array}
+      \]}
+    \item \textit{Local type-argument inference:}
+
+      \uncover<3->{\[
+        \begin{array}{lcl}
+          \text{Let } &  \ann{id}{\abs{\forall}{X}{X \to X}} &
+          \\ \text{Type } & \fbox{\ensuremath{id\ 0}} & \Uparrow Nat
+          \\ \text{Infer } & X\!=\!\textcolor{blue}{Nat} & \text{from } \textcolor{blue}{0}
+        \end{array}
+      \]}
+
+    \uncover<3->{\fbox{Local} and \textcolor{blue}{Synthetic}}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why use local type inference?}
+  \begin{itemize}
+  \item It is a method of \textit{partial} type inference
+    \begin{itemize}
+    \item \textit{Complete} type inference: no annotations \textbf{ever}
+
+      (e.g. \textit{Damas-Hindley-Milner} and ML)
+    \item Undecidable for System F (let alone Cedille!)
+    \end{itemize}
+    \pause
+  \item It is user-friendly
+    \begin{itemize}
+    \item Infers many type annotations
+    \item Predictable annotation requirements
+    \item Better-quality error messages
+    \end{itemize}
+    \pause
+  \item It is implementer-friendly
+    \begin{itemize}
+    \item Relatively simple implementation
+    \item \textit{Extensible}: new features added without threatening decidability
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Local Type Inference in Cedille}
+  Cedille provides a way to interrogate the two core features of LTI
+  
+  \begin{itemize}
+  \item \textit{Bidirectional Typechecking} gets special highlighting
+    \uncover<2->{
+      \begin{itemize}
+      \item In navigation mode, type \texttt{C-h 3} to see \textit{bidirectional
+          highlighting}.
+      \end{itemize}
+      }
+  \item \textit{Type-argument Inference} gets a dedicated buffer
+
+    \uncover<3->{
+      \begin{itemize}
+      \item In navigation mode, type \texttt{m} to see the \textit{meta-variables
+          buffer.}
+      \item \textbf{all} meta-variables present, \textbf{where} introduced,
+        \textbf{what} solutions
+      \end{itemize} }
+  \end{itemize}
+
+  \ \\ \ \\
+  \uncover<4->{
+  Cedille also has a \underline{novel} inference system: \textit{spine-local type inference}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Limitations of other LTI Systems}
+  Why a novel system? Other local type inference systems can sometimes still
+  require ``silly'' type annotations...
+
+  \[
+    \begin{array}{lccl}
+      \text{Assume}
+      & \ann{mkpair &}{& \abs{\forall}{X\ Y}{\textcolor<3>{blue}{X} \to Y \to Pair\
+        \cdot \alert<5>{X}\ \cdot Y}}
+      \\ \text{Type}
+      & mkpair\ \textcolor<3>{blue}{(\abs{\lambda}{x}{x})}\ 0
+      & \uncover<2->{\textcolor<2-3>{blue}{\Uparrow} & ???}
+      \\ \uncover<4->{\text{Type } & mkpair\ \alert<5>{(\abs{\lambda}{x}{x})}\ 0
+      & \alert<4-5>{\Downarrow} & Pair \cdot (\alert<5>{Nat \to Nat}) \cdot Nat}
+    \end{array}
+  \]
+
+  \begin{itemize}
+    \pause
+  \item We do not expect to locally \textcolor<2->{blue}{synthesize} a type 
+    \pause \pause
+  \item ... but we would expect to \alert<4->{check} it against a type
+    \pause
+    \begin{itemize}
+    \item We could call this ``contextual'' type-argument inference.
+    \end{itemize}
+    \pause
+  \item Unfortunately, not done in the two major published LTI systems
+    \begin{itemize}
+      \item Popular ``unofficial'' extension (used in e.g. Scala, Rust)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Limitations of other LTI Systems (cont.)}
+  \begin{itemize}
+  \item Usually uses ``fully-uncurried'' function applications
+    {\Large \[f(t_1,..,t_n)\]}
+    \begin{itemize}
+    \item Maximize available info at a single application
+    \end{itemize}
+    \pause
+  \item Usually without partial type application (``all-or-nothing'')
+    {\Large \[f[T_1,...,T_m](t_1,...,t_n)\]}
+  \end{itemize}    
+\end{frame}
+
+\subsection{Spine-local Type Inference}
+\begin{frame}
+  \frametitle{Our Contributions}
+  \begin{itemize}
+  \item Type inference for some expressions not typed by other variants of local
+    type inference, by using \textit{contextual} type-argument inference
+
+    \ \\ \centering
+    \only<1>{\mklheight{{\LARGE $t_1^{\Uparrow\Downarrow}$}}}
+    \only<2->{{\LARGE $f\ t_1^{\Uparrow}\
+        t_2^{\only<2>{\Uparrow}\only<3->{\alert{\Downarrow}}}\ t_3^{\Downarrow}
+        \uncover<3->{\alert{\Downarrow T}}$}}
+
+    \raggedright
+  \item Precise, specificational account of this technique
+  \item Better support function currying and partial type applications by being ``spine-local.''
+
+    \ \\ \centering
+    \mklheight{{\LARGE \fbox{$f(,a)$}}}
+    \only<4>{{\LARGE \fbox{$f[S,T,V](t_1, t_2, t_3)$}}}
+    \only<5->{{\LARGE \fbox{$f \cdot\!S \textcolor<6>{white}{\cdot\!T \cdot\!V}\ t_1\ t_2\ \textcolor<6>{white}{t_3}$}}}
+    \mklheight{{\LARGE \fbox{$f(a,)$}}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Room for Improvement}
+
+  Type inference in Cedille will continue to be improved upon. Some things we
+  want to address:
+
+  \begin{itemize}
+  \item Higher-order type arguments must be provided explicitly:
+
+    ($\aabs{\forall}{F}{\star \to \star}$)
+
+    \uncover<2->{
+      \begin{itemize}
+      \item \textbf{Comming soon:} second-order \textit{matching} is decidable
+        and finitary
+      \end{itemize}
+    }
+  \item Type arguments inferred \textit{only} between applications:
+
+    \only<1-2>{$nil \Downarrow List\ \cdot\!Nat$}
+    \only<3->{\st{$nil \Downarrow List\ \cdot\!Nat$}}
+    \uncover<3->{
+      Must write $nil\ \cdot Nat$
+      \begin{itemize}
+      \item<4-> \textbf{Coming soon:} polymorphic subsumption
+
+        $\abs{\forall}{A}{List\cdot\!A}\ \subcov\ List \cdot\!Nat$
+      \end{itemize}
+    }
+  \end{itemize}
+\end{frame}
+
+\section{Detailed Example}
+
+\begin{frame}
+  \frametitle{Terminology}
+
+  \begin{itemize}[<+->]
+  \item \textit{Application head}: variable or abstraction
+    \[x, \ \  \abs{\Lambda}{X}{t},\ \  \abs{\lambda}{x}{t}\]
+  \item \textit{Application spine}: head followed by seq. of term, type arguments
+    \[
+      \fbox{$x\textcolor{white}{t_1}$}\fbox{$t_1\ t_2\ t_3$} \text{ vs } (((x\ t_1)\ t_2)\ t_3)
+    \]
+  \item \textit{Applicand:} Term in the function position of an application
+    \[t_1 \text{ in } t_1\ t_2\]
+  \item \textit{Maximal application:} spine that is not an applicand
+    \[
+      \begin{array}{lc}
+        \text{Not max} & \underline{x\ t_1\ t_2}\ t_3
+        \\ \text{Max} & \underline{x\ t_1\ t_2\ t_3}
+      \end{array}
+    \]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example -- High Level Goals}
+  \[
+    \begin{array}{cccl}
+      \text{Assume}
+      & const & : & \abs{\forall}{X\ Y}{X \to Y \to X}
+      \\ \text{Assume}
+      & zero & : & Nat
+      \\ \text{Type}
+      & const\ (\abs{\lambda}{x}{x})\ zero & \Downarrow & Nat \to Nat
+    \end{array}
+  \]
+  \begin{itemize}[<+->]
+  \item Check the spine $const\ (\abs{\lambda}{x}{x})\ zero$ against
+    $\alert<3->{Nat \to Nat}$
+  \item We fill in missing types to ``elaborate'' to $const\ \cdot\alert<+->{(Nat \to Nat)}\ 
+    \cdot \textcolor<.->{blue}{Nat}\ (\aabs{\lambda}{x}{\alert<.->{Nat}}{x})\ \textcolor<.->{blue}{zero}$
+
+  \item<3-> $X$ inferred \alert<.->{contextually}, $Y$ \textcolor<.->{blue}{synthetically}
+
+    \uncover<4->{In Cedille: $\fbox{$const\ (\abs{\lambda}{x}{x})\ zero$}$}
+    \begin{itemize}
+    \item<4-> $?X : \star\ \triangleleft Nat \to Nat$
+    \item<4-> $?Y : \star\ = Nat$
+    \end{itemize}
+  \item<5-> And term argument $\abs{\lambda}{x}{x}$ \textit{checked} against
+    \alert{$Nat \to Nat$}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Spine Local}
+  \[\fbox{$const\ (\abs{\lambda}{x}{x})\ zero$} \Downarrow \alert<3->{Nat \to Nat}\]
+
+  \begin{itemize}
+  \item \textbf{Big idea:} locality for type-argument inference is \textit{the
+      spine}
+    \begin{itemize}
+    \item<2-> \fbox{cage meta-variables} here
+
+      never ``escape'' the spine or ``descend'' into the arguments
+
+    \item<3-> some meta-vars inferred \alert{contextually}
+
+      Using the expected result type
+    \end{itemize}
+  \item<4-> \textbf{Consequence:} you know where to look when type-argument
+    inference fails!
+  \end{itemize}
+
+  \centering
+  \ \\ \ \\
+  \only<1>{\includegraphics[scale=0.35]{../assets/spine-space}}
+  \only<2>{\includegraphics[scale=0.35]{../assets/spine-local}}
+  \only<3->{\includegraphics[scale=0.35]{../assets/spine-contextual}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Example - Details}
+  \[
+    \begin{array}{cccl}
+      \text{Assume}
+      & const & : & \textcolor<2>{blue}{\abs{\forall}{X\ Y}{\textcolor<6>{blue}{X} \to \textcolor<8>{blue}{Y} \to \textcolor<3>{blue}{X}}}
+      \\ \text{Assume}
+      & zero & : & \textcolor<8>{blue}{Nat}
+      \\ \text{Type}
+      & \textcolor<2>{blue}{const}\ (\abs{\lambda}{x}{x})\ zero
+              & \Downarrow & \alert<3>{Nat \to Nat}\uncover<4->{\ \alert<4>{=[Nat \to Nat/X]}X}
+      \\ \uncover<3->{
+      \text{Match}
+      & \textcolor<3>{blue}{X} & \ozzmat{X} & \alert<3>{Nat \to Nat}
+                                              }
+      \\ \uncover<5->{
+      \text{Type}
+      & \abs{\lambda}{x}{x} & \uncover<6->{\Downarrow} & \uncover<6->{[\alert<6>{Nat \to Nat}/X]\textcolor<6>{blue}{X}}
+                                                         }
+      \\ \uncover<7->{
+      \text{Type}
+      & zero & \uncover<8->{\Uparrow} & \uncover<8->{[\textcolor<8>{blue}{Nat}/Y]\textcolor<8>{blue}{Y}}
+      }
+    \end{array}
+  \]
+
+  \ \\
+  \only<2>{Synthesize type for head}
+  \only<3>{Match head return with expected return type}
+  \only<4>{Get a contextual \textit{instantiation}}
+  \only<5-6>{Type first argument \uncover<6>{in \textit{checking mode}}}
+  \only<7-8>{Type second argument \uncover<8>{in \textit{synthesis mode}}}
+  \only<9>{Conclude the spine has the expected type!}
+  \mklheight{$SF\forall$}
+\end{frame}
+
+\section{Annotation Requirements}
+
+\begin{frame}
+  \frametitle{Annotation Requirements: Abstractions (1/3)}
+
+  Saw how type inference \textit{works}. Now -- where does it
+  \textit{need help?}
+  
+  \begin{itemize}
+  \item<2-> \textit{Term and type abstractions} $\abs{\lambda}{x}{t}$, $\abs{\Lambda}{X}{t}$
+
+    Bare abstractions can only be checked; require type / kind annotations to
+    synthesize
+  \item<3-> \textbf{But:} when is a term's type checked? In a spine?
+    \begin{itemize}
+    \item<5-> when the \alert{checked type} of the spine
+    \item<6-> and the \textcolor{blue}{synthesized type} of the head
+    \item<7-> and any \textcolor{blue}{synthesized types} from earlier args
+    \item<8-> tells us the \textit{complete} type to \alert{check}
+    \end{itemize}
+  \end{itemize}
+
+  \uncover<4->{\Large
+    \[f^{\uncover<6->{\textcolor{blue}{\Uparrow}}}\ t_1^{\uncover<7->{\textcolor{blue}{\Uparrow}}}\ t_2^{\uncover<8->{\alert{\Downarrow}}}\ t_3 \alert<5->{\Downarrow T}\]
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Annotation Requirements: Type Arguments (2/3)}
+
+  Saw how type inference \textit{works}. Now -- where does it
+  \textit{need help?}
+
+  \begin{itemize}
+  \item \textit{Type arguments} (FO only)
+
+    Must provide type args explicitly when not informed by
+    \begin{itemize}
+    \item<2-> Checked type for spine: $const\ (\abs{\lambda}{x}{x})\ zero
+      \Downarrow \alert{[Nat \to Nat/X]}X$
+    \item<3-> Synthesized type for args: $zero \Uparrow \textcolor{blue}{[Nat/Y]}Y$
+    \end{itemize}
+  \item<4> \textbf{Example:} $\abs{\forall}{\textcolor{gray}{Y}\ X}{X \to X}$
+
+    $\textcolor{gray}{Y}$ doesn't occur in result or arg position
+
+    $\implies$ must be instantiated explicitly.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Annotation Requirements: Applicability (3/3)}
+
+  Saw how type inference \textit{works}. Now -- where does it
+  \textit{need help?}
+
+  \begin{itemize}
+  \item<2-> \textit{Type of a function} in a term or type application
+
+    must reveal resp. a type quantifier or arrow
+    \[
+      \begin{array}{ccc}
+        f\ \cdot\!T & \implies & f : \abs{\forall}{X}{S}
+        \\ f\ t & \implies & f : \abs{\forall}{\vars{X}}{S \to T}
+      \end{array}
+    \]
+  \item<3-> \textbf{Example:} assume $absurd : \aabs{\forall}{X}{\star}{X}$
+    \begin{itemize}
+    \item<4-> Will \textbf{not} type $absurd\ zero$
+    \item<4-> Will type $absurd \cdot\!(Nat \to Nat)\ zero$
+
+      Or even $absurd \cdot\!(\abs{\forall}{X}{X \to X})\ zero$
+    \end{itemize}
+
+  \item<5-> \textbf{Advantage:} meta-variables are \textit{one-to-one} with
+    quantified type variables in functions!
+
+    It's always easy to understand why a meta-var was introduced!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Thanks!}
+
+  \begin{itemize}
+  \item \texttt{language-overview/type-inference.ced}
+
+    For practical examples
+
+  \item Paper can be found on arXiv
+
+    (To appear in proceedings of IFL 2018)
+  \end{itemize}
+\end{frame}
+
+% \subsection{Soundness and Completeness}
+% \subsection{Annotations Requirements}
+% \subsection{Future Work}
+
+\end{document}
