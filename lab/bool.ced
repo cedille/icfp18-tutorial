@@ -1,0 +1,39 @@
+module Bool .
+
+import true.
+import false.
+
+Bool' ◂ ★ = ∀ X : ★ . X ➔ X ➔ X .
+tt' ◂ Bool' = Λ X . λ a . λ b . a.
+ff' ◂ Bool' = Λ X . λ a . λ b . b.
+
+BoolContra ◂ {tt' ≃ ff'} ➾ False =
+  Λ e . δ - e . 
+
+InductiveBool' ◂ Bool' ➔ ★ = λ b : Bool' . ∀ P : Bool' ➔ ★ . P tt' ➔ P ff' ➔ P b .
+
+Bool ◂ ★ = ι x : Bool' . InductiveBool' x .
+
+tt ◂ Bool = [ tt' , Λ X . λ a . λ b . a ] .
+ff ◂ Bool = [ ff' , Λ X . λ a . λ b . b ] .
+
+toBool ◂ Bool' ➔ Bool = λ b : Bool' . b · Bool tt ff .
+
+BoolReflection ◂ Π b : Bool . {toBool b ≃ b} = λ b . b.2 · (λ b : Bool' . {toBool b ≃ b}) β β .
+
+BoolInd ◂ Π b : Bool . ∀ P : Bool ➔ ★ .
+          P tt ➔ P ff ➔ P b =
+   λ x . Λ P . λ a . λ b .
+     ρ ς (BoolReflection x) - 
+       (x.2 · (λ x : Bool' . P (toBool x))
+         a b). 
+
+if ◂ Bool ➔ ∀ X : ★ . X ➔ X ➔ X =
+  λ b . b.1 .
+
+and ◂ Bool ➔ Bool ➔ Bool = λ b1 . λ b2 . b1.1 · Bool b2 ff .
+or  ◂ Bool ➔ Bool ➔ Bool = λ b1 . λ b2 . b1.1 · Bool tt b2 .
+
+not ◂ Bool ➔ Bool = λ b . b.1 · Bool ff tt .
+
+not-not ◂ Π b : Bool . { not (not b) ≃ b } = ● .

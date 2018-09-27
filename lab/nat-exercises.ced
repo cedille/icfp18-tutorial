@@ -1,0 +1,8 @@
+module NatExercises.
+
+import nat.
+
+easy ◂ ∀ n : Nat . ∀ m : Nat . { n ≃ zero } ➔ { add n m ≃ m } = ●.
+
+addAssoc ◂ Π m : Nat. Π n : Nat. Π o : Nat. {add (add m n) o ≃ add m (add n o)} =
+  λ m. λ n. λ o. θ<m> (inductionNat m) (Λ m. λ ih. ●) β .
