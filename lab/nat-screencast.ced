@@ -1,0 +1,55 @@
+module nat-screencast.
+
+import sigma.
+
+{-
+    ◂     \f
+    ★     \s
+    ∀     \a
+    ➔     \r
+    Λ     \L
+    Π     \p
+    ●     \h
+    ·     \.
+    β     \b
+    ρ     \R
+-}
+
+Nat ◂ ★ = ∀ X: ★. X ➔ (X ➔ X) ➔ X.
+zero ◂ Nat = Λ X. λ base. λ step. base.
+succ ◂ Nat ➔ Nat = λ n. Λ X. λ base. λ step. step (n base step) .
+
+one = succ zero.
+two = succ one.
+three  = succ two.
+
+
+ind-Nat ◂ ∀ P: Nat ➔ ★. P zero ➔ (Π m: Nat. P m ➔ P (succ m)) ➔ Π n: Nat. P n
+  = Λ P. λ base. λ step. λ n.
+      [ pf = n ·(Sigma ·Nat ·(λ n: Nat. P n)) (mksigma zero base)
+                 (λ pf'. [ n = proj1 pf' ] - mksigma (succ n) (step n (proj2 pf')))
+      ] - proj2 pf .
+
+ref-Nat ◂ Π n: Nat. {n zero succ ≃ n}
+  = λ n. ind-Nat ·(λ x: Nat. {x zero succ ≃ x}) β (λ m. λ eq. ρ+ eq - β) n.
+
+ind-one ◂ ∀ P: Nat ➔ ★. P zero ➔ (Π m: Nat. P m ➔ P (succ m)) ➔ P one
+  = Λ P. λ base. λ step. step zero base .
+
+ind-three ◂ ∀ P: Nat ➔ ★. P zero ➔ (Π m: Nat. P m ➔ P (succ m)) ➔ P three
+  = Λ P. λ base. λ step. step two (step one (step zero base)) .
+
+ind-three' ◂ ∀ P: Nat ➔ ★. P zero ➔ (Π m: Nat. P m ➔ P (succ m)) ➔ P three
+  = Λ P. λ base. λ step.
+      [ pf = three ·(Sigma ·Nat ·(λ n: Nat. P n)) (mksigma zero base)
+                   (λ pf'. [ n = proj1 pf' ] - mksigma (succ n) (step n (proj2 pf')))
+      ]
+      - proj2 pf .
+
+ind-two' ◂ ∀ P: Nat ➔ ★. P zero ➔ (Π m: Nat. P m ➔ P (succ m)) ➔ P two
+  = Λ P. λ base. λ step.
+     [ pf = two ·(Sigma ·Nat ·(λ n: Nat. P n))
+     (mksigma zero base)
+       (λ pf'. [ n = proj1 pf' ] - mksigma (succ n) (step n (proj2 pf')))
+     ]
+     - proj2 pf .
