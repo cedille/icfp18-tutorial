@@ -1,0 +1,83 @@
+module nat-screencast.
+
+import sigma.
+
+{-
+    ◂     \f
+    ★     \s
+    ∀     \a
+    ➔     \r
+    Λ     \L
+    λ     \l
+    Π     \p
+    ●     \h
+    ·     \.
+    β     \b
+    ρ     \R
+-}
+
+-- Let's take our original formulation and rename it, to indicate that this is
+-- the "computation" version of a Nat
+
+cNat ◂ ★ = ∀ X: ★. X ➔ (X ➔ X) ➔ X.
+czero ◂ cNat = Λ X. λ base. λ step. base.
+csucc ◂ cNat ➔ cNat = λ n. Λ X. λ base. λ step. step (n base step) .
+
+-- Now, we saw last time that the proofs of induction for *particular* Nats
+-- looked a lot like the nats themselves. We will actually see how to capitalize
+-- on this, but for now, instead of showing *all* Nats are inductive, lets
+-- describe what it means for *a* Nat to be inductive!
+
+-- iNat ◂ cNat ➔ ★
+--   = λ n: cNat. ∀ P: cNat ➔ ★. P czero ➔ (Π m: cNat. P m ➔ P (csucc m)) ➔ P n.
+
+iNat ◂ cNat ➔ ★
+  = λ n: cNat. ∀ P: cNat ➔ ★. P czero ➔ (∀ m: cNat. P m ➔ P (csucc m)) ➔ P n.
+
+
+-- Here's where the first new typing construct comes in to play -- the dependent
+-- intersection.
+
+Nat ◂ ★ = ι x: cNat. iNat x.
+
+-- Probably very bizzare! It helps to see a non-dependent intersection, first.
+
+Bool ◂ ★ = ∀ X: ★. X ➔ X ➔ X.
+true ◂ Bool = Λ X. λ t. λ f. t.
+flse ◂ Bool = Λ X. λ t. λ f. f.
+
+-- true looks a lot like zero...
+
+trueZero ◂ ι x: cNat. Bool = [ czero , true ].
+
+-- Introduction, alignment
+
+-- So what does this look like in the dependent case?
+
+zero ◂ Nat = [ czero , Λ P. λ base. λ step. base ] .
+succ ◂ Nat ➔ Nat
+  = λ n. [ csucc n.1 , Λ P. λ base. λ step. step -n.1 (n.2 base step) ].
+
+-- First, why this works as a proof of induction
+-- First and half, erasure of n.1 to n
+-- Second, why they aren't aligned
+
+-- Change iNat definition to ∀ -- an erased term argument
+-- A term that won't show up at run time, but is needed as a kind of type
+-- annotation.
+
+
+-- Now for a somewhat mysterious step -- we want a function that will "rebuild"
+-- a cNat into a Nat by applying it to the Nat constructors zero, and succ --
+-- but because these are equal to the computational versions, it will look just
+-- like an instance of reflection
+
+cNatToNat ◂ cNat ➔ Nat
+  = λ n. n zero succ .
+
+
+-- Since these Nats can talk about a kind of induction on cNats, we can actually
+-- prove the reflection law!
+
+ref-Nat ◂ Π m: Nat. { cNatToNat m.1 ≃ m }
+  = λ m. θ<m> m.2 β (Λ n. λ eq. ρ+ eq - β) .
